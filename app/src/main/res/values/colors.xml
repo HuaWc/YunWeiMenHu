@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="text_black">#333333</color>
+    <color name="text_gray">#6e6e6e</color>
+
+    <color name="common_bg">#EFF0F4</color>
+    <!--首页-->
+    <color name="bottom_bar_normal_bg">#E7E7E5</color>
+    <color name="common_botton_bar_blue">#ff3300</color>
+    <color name="common_botton_bar_gray">#717275</color>
+    <color name="red_bg">#F6563F</color>
+    <color name="meau_bg">#F8F8F8</color>
+    <color name="loging_select">#353535</color>
+    <color name="loging_unselect">#AAAAAA</color>
+    <color name="bg">#f4f4f4</color>
+    <color name="cal_today_background">#ff0babd1</color>
+    <color name="gray_text_color">#848484</color>
+
+
+    <color name="main_bar_color">#4F77E1</color>
+
+</resources>

@@ -54,7 +54,7 @@ public class MyALipayUtils {
             AliPayResult payResult = new AliPayResult((Map<String, String>) msg.obj);
             switch (payResult.getResultStatus()) {
                 case "9000":
-                    EventBus.getDefault().post(new EventCenter(EventUtil.PAYSUCCESS));
+                    EventBus.getDefault().post(new EventCenter(EventUtil.PAY_SUCCESS));
                     Toast.makeText(context, "支付成功", Toast.LENGTH_SHORT).show();
                     break;
                 case "8000":

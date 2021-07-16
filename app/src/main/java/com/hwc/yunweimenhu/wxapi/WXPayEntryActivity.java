@@ -44,7 +44,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
         if (req.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             if (req.getType() == 0) {//支付成功
                 ToastUtil.toast("支付成功!");
-                EventBus.getDefault().post(new EventCenter(EventUtil.PAYSUCCESS));
+                EventBus.getDefault().post(new EventCenter(EventUtil.PAY_SUCCESS));
                 finish();
             } else {
                 WXPayEntryActivity.this.finish();
@@ -61,7 +61,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             if (resp.errCode == 0) {//支付成功
                 ToastUtil.toast("支付成功!");
-                EventBus.getDefault().post(new EventCenter(EventUtil.PAYSUCCESS));
+                EventBus.getDefault().post(new EventCenter(EventUtil.PAY_SUCCESS));
                 WXPayEntryActivity.this.finish();
             } else {
                 WXPayEntryActivity.this.finish();

@@ -21,5 +21,6 @@
 
 
     <color name="main_bar_color">#4F77E1</color>
+    <color name="text_bar_blue">#3155B4</color>
 
 </resources>

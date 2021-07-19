@@ -14,6 +14,7 @@
 package com.hwc.yunweimenhu.base;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -27,6 +28,7 @@ import androidx.core.content.ContextCompat;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
+import com.hwc.yunweimenhu.activity.LoginActivity;
 import com.hwc.yunweimenhu.entity.UserInfo;
 import com.hwc.yunweimenhu.entity.VersionInfo;
 import com.hwc.yunweimenhu.http.AppConfig;
@@ -49,6 +51,7 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.zds.base.Toast.ToastUtil;
 import com.zds.base.base.SelfAppContext;
 import com.zds.base.util.StringUtil;
 import com.zds.base.util.Utils;
@@ -174,7 +177,7 @@ public class MyApplication extends SelfAppContext {
 
     public String getToken() {
         UserInfo userInfo = getUserInfo();
-        return userInfo.getCookievalue();
+        return userInfo.getToken();
     }
     private CommonDialog commonDialog;
 
@@ -191,26 +194,12 @@ public class MyApplication extends SelfAppContext {
     }
 
     /**
-     * 保存缓存用户信息
-     *
-     * @param user
-     */
-    public void uPUserInfo(final UserInfo user) {
-        if (user != null) {
-            UserInfo userInfo = getUserInfo();
-            user.setCookiekey(userInfo.getCookiekey());
-            user.setCookievalue(userInfo.getCookievalue());
-            Storage.saveUsersInfo(user);
-        }
-    }
-
-    /**
      * 用户存在是ture 否则是false
      *
      * @return
      */
     public boolean checkUser() {
-        if (StringUtil.isEmpty(getUserInfo().getCookievalue())) {
+        if (StringUtil.isEmpty(getUserInfo().getToken())) {
             return false;
         } else {
             return true;
@@ -233,7 +222,7 @@ public class MyApplication extends SelfAppContext {
             cookieManager.setAcceptCookie(true);
             if (checkUser()) {
                 cookieManager.setCookie(url
-                        , "70b9___ewei_shopv2_member_session_1=" + getUserInfo().getCookievalue() + ";path=/");//cookies是在HttpClient中获得的cookie
+                        , "70b9___ewei_shopv2_member_session_1=" + getUserInfo().getToken() + ";path=/");//cookies是在HttpClient中获得的cookie
             }else {
                 cookieManager.setCookie(url
                         , "70b9___ewei_shopv2_member_session_1=;path=/");//cookies是在HttpClient中获得的cookie
@@ -302,6 +291,15 @@ public class MyApplication extends SelfAppContext {
                 .setTransition(new VersionInfo())
                 .build();
         CretinAutoUpdateUtils.init(builder);
+    }
+
+
+    public void toLogin(Context context) {
+        ActivityStackManager.getInstance().killAllActivity();
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        ToastUtil.toast("登录已失效，请您重新登陆~");
     }
 
     /**

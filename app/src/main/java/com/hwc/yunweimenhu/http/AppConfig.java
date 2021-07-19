@@ -400,6 +400,10 @@ public class AppConfig {
      */
     public static final String OpAlarmInfo = mainUrl + "v1/wfm/ucm/OpAlarmInfo/info";
 
+    /**
+     * 获取运维人员信息
+     */
+    public static final String getYwInfo = mainUrl + "v1/operation/PtUserInfo/getYwInfo";
 
 
 

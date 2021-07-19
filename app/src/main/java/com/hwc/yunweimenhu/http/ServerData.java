@@ -3,10 +3,9 @@ package com.hwc.yunweimenhu.http;
 import java.io.Serializable;
 
 /**
- * 作   者：Christ
+ * 作   者：花伟成
  * 描   述: 网络请求 基层数据封装
- * 日   期: 2017/11/13 17:50
- * 更新日期: 2017/11/13
+ * 日   期: 2021/4/28 17:50
  *
  * @author Administrator
  */
@@ -14,15 +13,24 @@ public class ServerData implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    private int status;
+    private int code;
+    private String status;
     private String message;
-    private Object result;
+    private Object data;
 
-    public int getStatus() {
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -34,11 +42,11 @@ public class ServerData implements Serializable {
         this.message = message;
     }
 
-    public Object getResult() {
-        return result;
+    public Object getData() {
+        return data;
     }
 
-    public void setResult(Object result) {
-        this.result = result;
+    public void setData(Object data) {
+        this.data = data;
     }
 }

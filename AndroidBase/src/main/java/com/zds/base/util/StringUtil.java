@@ -7,10 +7,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * 作   者：Christ
@@ -359,5 +361,52 @@ public class StringUtil {
             result += hexString.toUpperCase();
         }
         return result;
+    }
+
+
+    public static String dealDateFormat(String utcTime) {
+        if (StringUtil.isEmpty(utcTime)) {
+            return "";
+        }
+/*        Date date1 = null;
+        DateFormat df2 = null;
+        try {
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = df.parse(oldDate);
+            SimpleDateFormat df1 = new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy", Locale.SIMPLIFIED_CHINESE);
+            date1 = df1.parse(date.toString());
+            df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return df2.format(date1);*/
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        Date utcDate = null;
+
+        try {
+            utcDate = sdf.parse(utcTime);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+        }
+
+        sdf.setTimeZone(TimeZone.getDefault());
+
+        Date locatlDate = null;
+
+        String localTime = sdf.format(utcDate.getTime());
+
+        try {
+            locatlDate = sdf.parse(localTime);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+
+        }
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(locatlDate);
     }
 }

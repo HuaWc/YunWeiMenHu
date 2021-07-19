@@ -90,7 +90,7 @@ public class LoginActivity extends BaseActivity {
         rlLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toTheActivity(MainActivity.class);
+                newLogin();
             }
         });
 
@@ -103,7 +103,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-/*    private void newLogin() {
+    private void newLogin() {
         if(StringUtil.isEmpty(etAccount.getText().toString().trim())){
             ToastUtil.toast("请输入正确的账号和密码！");
             return;
@@ -137,7 +137,7 @@ public class LoginActivity extends BaseActivity {
                 } else {
                     runOnUiThread(new Runnable() {
                         public void run() {
-                           ToastUtil.toast(msg);
+                            ToastUtil.toast(msg);
 
                         }
                     });
@@ -153,6 +153,6 @@ public class LoginActivity extends BaseActivity {
                 });
             }
         });
-    }*/
+    }
 
 }

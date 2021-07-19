@@ -1,6 +1,5 @@
 package com.hwc.yunweimenhu.fragment;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +9,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.hwc.yunweimenhu.R;
+import com.hwc.yunweimenhu.activity.AskHelpActivity;
 import com.hwc.yunweimenhu.base.BaseFragment;
-import com.hwc.yunweimenhu.view.dialog.BaseDialog;
 import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
 
@@ -27,16 +26,16 @@ public class FirstHomeFragment extends BaseFragment {
     View bar;
     @BindView(R.id.tv_message)
     TextView tvMessage;
-    @BindView(R.id.ll_dwkc)
-    LinearLayout llDwkc;
-    @BindView(R.id.ll_gjgl)
-    LinearLayout llGjgl;
+    @BindView(R.id.ll_sjsb)
+    LinearLayout llSjsb;
+    @BindView(R.id.ll_sjgz)
+    LinearLayout llSjgz;
     @BindView(R.id.ll_dzdt)
     LinearLayout llDzdt;
-    @BindView(R.id.ll_rwgl)
-    LinearLayout llRwgl;
-    @BindView(R.id.ll_gdgl)
-    LinearLayout llGdgl;
+    @BindView(R.id.ll_zxbz)
+    LinearLayout llZxbz;
+    @BindView(R.id.ll_gdcl)
+    LinearLayout llGdcl;
     @BindView(R.id.ll_jqqd)
     LinearLayout llJqqd;
     @BindView(R.id.scrollView)
@@ -92,4 +91,29 @@ public class FirstHomeFragment extends BaseFragment {
         unbinder.unbind();
     }
 
+
+    @OnClick({R.id.ll_sjsb, R.id.ll_sjgz, R.id.ll_dzdt, R.id.ll_zxbz, R.id.ll_gdcl, R.id.ll_jqqd})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.ll_sjsb:
+                //事件上报
+                break;
+            case R.id.ll_sjgz:
+                //事件跟踪
+                break;
+            case R.id.ll_dzdt:
+                //电子地图
+                break;
+            case R.id.ll_zxbz:
+                //咨询帮助
+                toTheActivity(AskHelpActivity.class);
+                break;
+            case R.id.ll_gdcl:
+                //工单处理
+                break;
+            case R.id.ll_jqqd:
+                ToastUtil.toast("敬请期待");
+                break;
+        }
+    }
 }

@@ -4,18 +4,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hwc.yunweimenhu.R;
-import com.hwc.yunweimenhu.adapter.WorkPeopleAdapter;
+import com.hwc.yunweimenhu.adapter.WorkOrderTrackAdapter;
 import com.hwc.yunweimenhu.base.BaseActivity;
-import com.hwc.yunweimenhu.entity.WorkPeople;
+import com.hwc.yunweimenhu.entity.EventTrackInfo;
 import com.hwc.yunweimenhu.http.ApiClient;
 import com.hwc.yunweimenhu.http.AppConfig;
 import com.hwc.yunweimenhu.http.ResultListener;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.hwc.yunweimenhu.util.RecyclerViewHelper;
 import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
 import com.zds.base.json.FastJsonUtil;
@@ -29,31 +30,29 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by Christ on 2021/7/16.
+ * Created by Christ on 2021/6/29.
  * By an amateur android developer
  * Email 627447123@qq.com
- * <p>
- * 运维人员手册
  */
-public class WorkPeopleListActivity extends BaseActivity {
+public class EventToTrackActivity extends BaseActivity {
     @BindView(R.id.bar)
     View bar;
     @BindView(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.rv)
-    RecyclerView rv;
-    @BindView(R.id.refresh_layout)
-    SmartRefreshLayout refreshLayout;
-    @BindView(R.id.all)
-    LinearLayout all;
+    @BindView(R.id.tv_return)
+    TextView tvReturn;
+    @BindView(R.id.ll_btn)
+    LinearLayout llBtn;
+    @BindView(R.id.rv_track)
+    RecyclerView rvTrack;
 
-    private List<WorkPeople> mList;
-    private WorkPeopleAdapter adapter;
-
+    private String id;
+    private List<EventTrackInfo> mList;
+    private WorkOrderTrackAdapter adapter;
 
     @Override
     protected void initContentView(Bundle bundle) {
-        setContentView(R.layout.activity_work_people_list);
+        setContentView(R.layout.activity_event_to_track);
     }
 
     @Override
@@ -66,18 +65,38 @@ public class WorkPeopleListActivity extends BaseActivity {
 
     private void initAdapter() {
         mList = new ArrayList<>();
-        adapter = new WorkPeopleAdapter(mList);
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(new LinearLayoutManager(this));
-        getData();
+        adapter = new WorkOrderTrackAdapter(mList);
+        rvTrack.setAdapter(adapter);
+        rvTrack.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerViewHelper.recyclerviewAndScrollView(rvTrack);
+        getTrackData();
     }
 
-    private void getData() {
+
+    private void initClick() {
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        tvReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
+
+
+    private void getTrackData() {
         Map<String, Object> hashMap = new HashMap<>();
-        ApiClient.requestNetGet(this, AppConfig.getYwInfo, "加载中", hashMap, new ResultListener() {
+        hashMap.put("faultOrAlarmId", id);
+        hashMap.put("checkFlag", 0);
+        ApiClient.requestNetGet(this, AppConfig.lookOpFaultHandleMap, "", hashMap, new ResultListener() {
             @Override
             public void onSuccess(String json, String msg) {
-                List<WorkPeople> list = FastJsonUtil.getList(json, WorkPeople.class);
+                List<EventTrackInfo> list = FastJsonUtil.getList(json, EventTrackInfo.class);
                 if (list != null) {
                     mList.addAll(list);
                     adapter.notifyDataSetChanged();
@@ -91,19 +110,6 @@ public class WorkPeopleListActivity extends BaseActivity {
         });
     }
 
-    private void initClick() {
-        refreshLayout.setEnableRefresh(false);
-
-        refreshLayout.setEnableLoadmore(false);
-        ivBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-    }
-
-
     @Override
     protected void onEventComing(EventCenter center) {
 
@@ -111,7 +117,7 @@ public class WorkPeopleListActivity extends BaseActivity {
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        id = extras.getString("id");
     }
 
     @Override

@@ -21,7 +21,7 @@ public class Constant {
     /**
      * 成功
      */
-    public static final int CODESUCCESS = 1;
+    public static final int CODESUCCESS = 200;
     /**
      * 请求失败 错误
      */

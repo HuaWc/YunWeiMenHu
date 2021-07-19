@@ -60,7 +60,7 @@
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
-                        android:id="@+id/ll_dwkc"
+                        android:id="@+id/ll_sjsb"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
@@ -93,7 +93,7 @@
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
-                        android:id="@+id/ll_gjgl"
+                        android:id="@+id/ll_sjgz"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
@@ -169,7 +169,7 @@
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
-                        android:id="@+id/ll_rwgl"
+                        android:id="@+id/ll_zxbz"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
@@ -212,7 +212,7 @@
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
-                        android:id="@+id/ll_gdgl"
+                        android:id="@+id/ll_gdcl"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.hwc.yunweimenhu.R;
 import com.hwc.yunweimenhu.base.BaseActivity;
+import com.hwc.yunweimenhu.base.MyApplication;
 import com.zds.base.entity.EventCenter;
 
 import butterknife.BindView;
@@ -32,8 +33,18 @@ public class WelcomeActivity extends BaseActivity {
             @Override
             public void run() {
                 //do something
+                if (MyApplication.getInstance().checkUser()) {
+                    if (MyApplication.getInstance().getUserInfo().isRemember()) {
+                        toTheActivity(MainActivity.class);
+                    } else {
+                        MyApplication.getInstance().cleanUserInfo();
+                        toTheActivity(LoginActivity.class);
+                    }
+                } else {
+                    MyApplication.getInstance().cleanUserInfo();
+                    toTheActivity(LoginActivity.class);
+                }
 
-                startActivity(LoginActivity.class);
                 finish();
 
             }

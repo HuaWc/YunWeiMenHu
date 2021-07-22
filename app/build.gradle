@@ -5,7 +5,7 @@ android {
     buildToolsVersion rootProject.ext.android.buildToolsVersion
     flavorDimensions "default"
     defaultConfig {
-        applicationId "com.hwc.yunweimenhu"
+        applicationId "com.suncreate.shinyportal"
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
@@ -38,7 +38,7 @@ android {
             applicationVariants.all {
                 variant ->
                     variant.outputs.all { output ->
-                        outputFileName = '运维门户-v-' + rootProject.ext.android.versionName + "-" + getDate() + '.apk'
+                        outputFileName = '运维门户应用-v-' + rootProject.ext.android.versionName + "-" + getDate() + '.apk'
                     }
             }
 
@@ -52,7 +52,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    outputFileName = '运维门户-v-' + rootProject.ext.android.versionName + "-" + getDate() + '.apk'
+                    outputFileName = '运维门户应用-v-' + rootProject.ext.android.versionName + "-" + getDate() + '.apk'
                 }
             }
         }
@@ -61,17 +61,17 @@ android {
         //开发环境
         develop {
             buildConfigField "String", "BASEURL", URLDEVELOP
-            resValue "string", "app_name", "运维门户（开发）"
+            resValue "string", "app_name", "运维门户应用（开发）"
         }
         //测试环境
         check {
             buildConfigField "String", "BASEURL", URLCHECK
-            resValue "string", "app_name", "运维门户（测试）"
+            resValue "string", "app_name", "运维门户应用（测试）"
         }
         //生产环境
         product {
             buildConfigField "String", "BASEURL", URLPRODUCT
-            resValue "string", "app_name", "运维门户"
+            resValue "string", "app_name", "运维门户应用"
         }
 
     }
@@ -173,6 +173,7 @@ dependencies {
 
     implementation rootProject.ext.dependencies["wechat"]
     implementation rootProject.ext.dependencies["pickView"]
+    implementation rootProject.ext.dependencies["myTabLayout"]
 
     implementation rootProject.ext.dependencies["scanplus"]
     implementation rootProject.ext.dependencies["AndroidFilePicker"]

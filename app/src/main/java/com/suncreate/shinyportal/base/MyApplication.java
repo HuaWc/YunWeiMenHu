@@ -34,6 +34,7 @@ import com.suncreate.shinyportal.entity.VersionInfo;
 import com.suncreate.shinyportal.http.AppConfig;
 import com.suncreate.shinyportal.updata.CretinAutoUpdateUtils;
 import com.suncreate.shinyportal.R;
+import com.suncreate.shinyportal.util.GDLocationUtil;
 import com.suncreate.shinyportal.view.dialog.CommonDialog;
 import com.suncreate.shinyportal.wxapi.WeChatConstans;
 import com.qiniu.android.storage.Configuration;
@@ -78,6 +79,8 @@ public class MyApplication extends SelfAppContext {
         instance = this;
         init();
         JPushInterface.init(this);
+        GDLocationUtil.init(this);
+
     }
     private IWXAPI mIWXAPI;
 

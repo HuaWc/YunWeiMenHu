@@ -12,6 +12,7 @@ import com.suncreate.shinyportal.R;
 import com.suncreate.shinyportal.activity.AskHelpActivity;
 import com.suncreate.shinyportal.activity.EventListActivity;
 import com.suncreate.shinyportal.activity.EventManagementActivity;
+import com.suncreate.shinyportal.activity.MapActivity;
 import com.suncreate.shinyportal.activity.WorkOrderManagementUserActivity;
 import com.suncreate.shinyportal.base.BaseFragment;
 import com.zds.base.Toast.ToastUtil;
@@ -108,6 +109,7 @@ public class FirstHomeFragment extends BaseFragment {
                 break;
             case R.id.ll_dzdt:
                 //电子地图
+                toTheActivity(MapActivity.class);
                 break;
             case R.id.ll_zxbz:
                 //咨询帮助

@@ -688,7 +688,7 @@ public class EventListFragment extends BaseFragment {
 
 
         mList = new ArrayList<>();
-        adapter = new EventMenuAdapter(mList);
+        adapter = new EventMenuAdapter(mList, type == 0 ? 1 : 0);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

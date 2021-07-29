@@ -702,7 +702,7 @@ public class EventManagementActivity extends BaseActivity {
 
 
         mList = new ArrayList<>();
-        adapter = new EventMenuAdapter(mList);
+        adapter = new EventMenuAdapter(mList,1);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {

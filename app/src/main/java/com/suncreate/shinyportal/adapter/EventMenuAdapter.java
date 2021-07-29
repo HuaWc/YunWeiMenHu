@@ -14,7 +14,9 @@ import com.suncreate.shinyportal.entity.EventMenuInfo;
 import java.util.List;
 
 public class EventMenuAdapter extends BaseQuickAdapter<EventMenuInfo, BaseViewHolder> {
-    public EventMenuAdapter(@Nullable List<EventMenuInfo> data) {
+    private int type;//两种 一种可以有 评价按钮   另一个没有
+
+    public EventMenuAdapter(@Nullable List<EventMenuInfo> data,int type) {
         super(R.layout.adapter_main_event, data);
     }
 
@@ -30,11 +32,16 @@ public class EventMenuAdapter extends BaseQuickAdapter<EventMenuInfo, BaseViewHo
                 .setText(R.id.tv_ip, item.getIp())
                 .setText(R.id.tv_jg, item.getAssetNature() + ">" + item.getAssetType() + ">" + item.getMap().getAssetClass());
         helper.addOnClickListener(R.id.tv_look).addOnClickListener(R.id.tv_evaluate);
-        if ("闭环".equals(item.getAlarmStatus())) {
-            tv_evaluate.setVisibility(View.VISIBLE);
+        if(type == 1){
+            if ("闭环".equals(item.getAlarmStatus())) {
+                tv_evaluate.setVisibility(View.VISIBLE);
+            } else {
+                tv_evaluate.setVisibility(View.GONE);
+            }
         } else {
             tv_evaluate.setVisibility(View.GONE);
         }
+
         if (item.getMap().getIsCollect() != null && item.getMap().getIsCollect() == 1) {
             //收藏
             iv_sc.setSelected(true);

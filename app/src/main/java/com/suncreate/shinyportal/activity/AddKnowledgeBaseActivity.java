@@ -92,7 +92,7 @@ public class AddKnowledgeBaseActivity extends BaseActivity {
 
 
     private void getTypeData() {
-        GetDictDataHttp.getDictData(this, "", new GetDictDataHttp.GetDictDataResult() {
+        GetDictDataHttp.getDictData(this, "KNOWLEDGE_TYPE", new GetDictDataHttp.GetDictDataResult() {
             @Override
             public void getData(List<DictInfo> list) {
                 if (list != null) {
@@ -180,7 +180,7 @@ public class AddKnowledgeBaseActivity extends BaseActivity {
 
     private void getClassData() {
         classList.clear();
-        GetDictDataHttp.getDictData(this, "", new GetDictDataHttp.GetDictDataResult() {
+        GetDictDataHttp.getDictData(this, typeStr, new GetDictDataHttp.GetDictDataResult() {
             @Override
             public void getData(List<DictInfo> list) {
                 if (list != null) {

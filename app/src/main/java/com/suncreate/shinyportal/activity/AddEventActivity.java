@@ -15,6 +15,7 @@ import com.suncreate.shinyportal.base.BaseActivity;
 import com.suncreate.shinyportal.base.MyApplication;
 import com.suncreate.shinyportal.entity.AssetEquipment;
 import com.suncreate.shinyportal.entity.DictInfo;
+import com.suncreate.shinyportal.entity.PtCameraInfo;
 import com.suncreate.shinyportal.http.ApiClient;
 import com.suncreate.shinyportal.http.AppConfig;
 import com.suncreate.shinyportal.http.ResultListener;
@@ -72,10 +73,14 @@ public class AddEventActivity extends BaseActivity {
     private int from = 0;//0默认手动填写进入  1扫码进入
     private String alarmLevel;
     private String assetId;
+    private String cameraId;
+    private String orgName;
     private String orgId;
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private List<String> levelOptions;
     private List<DictInfo> levelList;
+
+    private PtCameraInfo entityInfo;
 
     @Override
     protected void initContentView(Bundle bundle) {
@@ -88,6 +93,37 @@ public class AddEventActivity extends BaseActivity {
         bar.setBackgroundColor(getResources().getColor(R.color.main_bar_color));
         initClick();
         getLevelData();
+        if (from == 1) {
+            if (!StringUtil.isEmpty(cameraId)) {
+                getCameraDetail();
+            } else {
+                ToastUtil.toast("选择告警设备ID信息为空，请重试！");
+                finish();
+            }
+        }
+    }
+
+    private void getCameraDetail() {
+        Map<String, Object> hashMap = new HashMap<>();
+        hashMap.put("cameraId", cameraId);
+        ApiClient.requestNetPost(this, AppConfig.selectCamera, "加载中", hashMap, new ResultListener() {
+            @Override
+            public void onSuccess(String json, String msg) {
+                entityInfo = FastJsonUtil.getObject(FastJsonUtil.getString(FastJsonUtil.getString(json, "model"), "ptCameraInfo"), PtCameraInfo.class);
+                orgName = FastJsonUtil.getString(FastJsonUtil.getString(FastJsonUtil.getString(FastJsonUtil.getString(json, "model"), "ptCameraInfo"), "map"), "orgName");
+                tvAssetName.setText(entityInfo.getCameraName());
+                assetId = entityInfo.getCameraNo();
+                orgId = entityInfo.getOrgId() + "";
+                tvJg.setText(StringUtil.isEmpty(orgName) ? "—" : orgName);
+                tvAssetName.setClickable(false);
+            }
+
+            @Override
+            public void onFailure(String msg) {
+                ToastUtil.toast(msg);
+                finish();
+            }
+        });
     }
 
     private void getLevelData() {
@@ -253,6 +289,7 @@ public class AddEventActivity extends BaseActivity {
     @Override
     protected void getBundleExtras(Bundle extras) {
         from = extras.getInt("from", 0);
+        cameraId = extras.getString("cameraId");
     }
 
     @Override

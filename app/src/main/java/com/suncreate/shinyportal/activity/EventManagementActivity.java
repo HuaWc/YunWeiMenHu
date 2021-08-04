@@ -1,7 +1,11 @@
 package com.suncreate.shinyportal.activity;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -11,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +50,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.suncreate.shinyportal.view.dialog.BaseDialog;
 import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
 import com.zds.base.json.FastJsonUtil;
@@ -115,6 +121,8 @@ public class EventManagementActivity extends BaseActivity {
     LinearLayout llSelect;
     @BindView(R.id.all)
     LinearLayout all;
+    @BindView(R.id.tv_reset_time)
+    TextView tvResetTime;
     private List<EventMenuInfo> mList;
     private EventMenuAdapter adapter;
 
@@ -232,6 +240,13 @@ public class EventManagementActivity extends BaseActivity {
     }
 
     private void initClick() {
+        tvResetTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvTimeStart.setText("");
+                tvTimeEnd.setText("");
+            }
+        });
         tvFj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -285,7 +300,7 @@ public class EventManagementActivity extends BaseActivity {
             public void onClick(View view) {
                 toTheActivity(AddEventActivity.class);
 
-                // showDialog();
+                showDialog();
             }
         });
         tvMore.setOnClickListener(new View.OnClickListener() {
@@ -829,7 +844,7 @@ public class EventManagementActivity extends BaseActivity {
     }
 
 
-    private static final int REQUEST_CODE_SCAN = 0X01;
+    private static final int REQUEST_CODE_SCAN = 0X021;
 
 
     /**
@@ -857,6 +872,40 @@ public class EventManagementActivity extends BaseActivity {
                 getData(false);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //receive result after your activity finished scanning
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK || data == null) {
+            return;
+        }
+        // Obtain the return value of HmsScan from the value returned by the onActivityResult method by using ScanUtil.RESULT as the key value.
+        if (requestCode == REQUEST_CODE_SCAN) {
+            Object obj = data.getParcelableExtra(ScanUtil.RESULT);
+            if (obj instanceof HmsScan) {
+                if (!TextUtils.isEmpty(((HmsScan) obj).getOriginalValue())) {
+                    String info = ((HmsScan) obj).getOriginalValue();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("positionCode", info);
+                    toTheActivity(SelectAlertCameraActivity.class, bundle);
+//                    String uuid = FastJsonUtil.getString(info, "uuid");
+//                    String ip = FastJsonUtil.getString(info, "ip");
+//                    if (StringUtil.isEmpty(uuid) || StringUtil.isEmpty(ip)) {
+//                        MyToastUtils.refreshToast("无效的二维码，请重试");
+//                        return;
+//                    }
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString("uuid", uuid);
+//                    bundle.putString("ip", ip);
+//                    bundle.putInt("from", 2);
+//                    toTheActivity(ScanConfirmLoginActivity.class, bundle);
+                }
+                return;
+            }
+        }
+    }
+
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -889,4 +938,40 @@ public class EventManagementActivity extends BaseActivity {
             finish();
         }
     }
+
+
+
+    private void showDialog() {
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_alert, null);
+        View tv_sys = view.findViewById(R.id.tv_sys);
+        View tv_hand = view.findViewById(R.id.tv_hand);
+        View tv_cancel = view.findViewById(R.id.tv_cancel);
+        BaseDialog.getInstance()
+                .setLayoutView(view, this)
+                .dissmissDialog()
+                .setWindow(1, 0.5)
+                .isCancelable(true)
+                .setOnClickListener(tv_sys, new BaseDialog.OnClickListener() {
+                    @Override
+                    public void onClick(View view, Dialog dialog) {
+                        dialog.dismiss();
+                        scanCode();
+                    }
+                })
+                .setOnClickListener(tv_hand, new BaseDialog.OnClickListener() {
+                    @Override
+                    public void onClick(View view, Dialog dialog) {
+                        dialog.dismiss();
+                        toTheActivity(AddEventActivity.class);
+                    }
+                })
+                .setOnClickListener(tv_cancel, new BaseDialog.OnClickListener() {
+                    @Override
+                    public void onClick(View view, Dialog dialog) {
+                        //取消
+                        dialog.dismiss();
+                    }
+                }).bottomShow();
+    }
+
 }

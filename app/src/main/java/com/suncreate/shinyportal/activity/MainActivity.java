@@ -14,10 +14,16 @@ import android.widget.Toast;
 
 import com.suncreate.shinyportal.fragment.FirstHomeFragment;
 import com.suncreate.shinyportal.fragment.FirstPersonalFragment;
+import com.suncreate.shinyportal.http.ApiClient;
+import com.suncreate.shinyportal.http.AppConfig;
+import com.suncreate.shinyportal.http.ResultListener;
 import com.suncreate.shinyportal.updata.CretinAutoUpdateUtils;
 import com.suncreate.shinyportal.R;
 import com.suncreate.shinyportal.base.BaseActivity;
 import com.zds.base.entity.EventCenter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -209,7 +215,7 @@ public class MainActivity extends BaseActivity {
      * 防止进入具体功能页面之后才检测到token失效，多重弹窗
      */
     private void getRole() {
-/*        Map<String, Object> hashMap = new HashMap<>();
+        Map<String, Object> hashMap = new HashMap<>();
         ApiClient.requestNetGet(this, AppConfig.getUserRole, "", hashMap, new ResultListener() {
             @Override
             public void onSuccess(String json, String msg) {
@@ -220,7 +226,7 @@ public class MainActivity extends BaseActivity {
             public void onFailure(String msg) {
 
             }
-        });*/
+        });
     }
 
 }

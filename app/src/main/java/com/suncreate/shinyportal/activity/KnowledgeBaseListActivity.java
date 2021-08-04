@@ -114,11 +114,12 @@ public class KnowledgeBaseListActivity extends BaseActivity {
     }
 
     private void getSelectData1() {
-        GetDictDataHttp.getDictData(this, "", new GetDictDataHttp.GetDictDataResult() {
+        GetDictDataHttp.getDictData(this, "KNOWLEDGE_TYPE", new GetDictDataHttp.GetDictDataResult() {
             @Override
             public void getData(List<DictInfo> list) {
-                if(list != null){
+                if (list != null) {
                     typeList.addAll(list);
+                    stringOptions1.add("全部");
                     for (DictInfo t : typeList) {
                         stringOptions1.add(t.getDataName());
                     }
@@ -224,10 +225,16 @@ public class KnowledgeBaseListActivity extends BaseActivity {
             @Override
             public void getOptionsResult(int options1, int options2, int options3) {
                 tvSjfldy.setText(stringOptions1.get(options1));
-                tvGzlx.setText("");
                 select2 = "";
-                select1 = typeList.get(options1).getDataValue();
-                getSelectData2();
+                tvGzlx.setText("");
+                stringOptions2.clear();
+                if (options1 == 0) {
+                    select1 = "";
+                    classList.clear();
+                } else {
+                    select1 = typeList.get(options1-1).getDataValue();
+                    getSelectData2();
+                }
                 getData(false);
             }
         });
@@ -259,7 +266,7 @@ public class KnowledgeBaseListActivity extends BaseActivity {
         GetDictDataHttp.getDictData(this, select1, new GetDictDataHttp.GetDictDataResult() {
             @Override
             public void getData(List<DictInfo> list) {
-                if(list != null){
+                if (list != null) {
                     classList.addAll(list);
                     stringOptions2.clear();
                     if (classList != null) {

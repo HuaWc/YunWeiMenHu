@@ -8,6 +8,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+
 import com.suncreate.shinyportal.R;
 import com.suncreate.shinyportal.activity.AskHelpActivity;
 import com.suncreate.shinyportal.activity.EventListActivity;
@@ -15,8 +17,14 @@ import com.suncreate.shinyportal.activity.EventManagementActivity;
 import com.suncreate.shinyportal.activity.MapActivity;
 import com.suncreate.shinyportal.activity.WorkOrderManagementUserActivity;
 import com.suncreate.shinyportal.base.BaseFragment;
+import com.suncreate.shinyportal.base.MyApplication;
+import com.suncreate.shinyportal.entity.UserInfo;
 import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
+import com.zds.base.util.StringUtil;
+
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,6 +54,8 @@ public class FirstHomeFragment extends BaseFragment {
     ScrollView scrollView;
     @BindView(R.id.all)
     LinearLayout all;
+    @BindView(R.id.cd_gdcl)
+    CardView cdGdcl;
 
 
     @Override
@@ -66,8 +76,28 @@ public class FirstHomeFragment extends BaseFragment {
     @Override
     protected void initLogic() {
         initBar();
-
+        initUserInfo();
     }
+
+    private void initUserInfo() {
+        UserInfo userInfo = MyApplication.getInstance().getUserInfo();
+        if (StringUtil.isEmpty(userInfo.getToken())) {
+            MyApplication.getInstance().toLogin(getContext());
+        } else {
+            if (userInfo.getUserType() != null && userInfo.getUserType() == 99) {
+                //超级管理员
+                cdGdcl.setVisibility(View.VISIBLE);
+            } else {
+                //不是超级管理员，看看是不是it管理员
+                if (!StringUtil.isEmpty(userInfo.getMap().getUserTypes()) && Arrays.asList(userInfo.getMap().getUserTypes().split(",")).contains("5")) {
+                    cdGdcl.setVisibility(View.VISIBLE);
+                } else {
+                    cdGdcl.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
 
     /**
      * EventBus接收消息

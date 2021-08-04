@@ -19,6 +19,10 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.suncreate.shinyportal.R;
 import com.suncreate.shinyportal.activity.EventDetailActivity;
 import com.suncreate.shinyportal.activity.EventToEvaluateActivity;
@@ -39,10 +43,6 @@ import com.suncreate.shinyportal.interfaces.PickerViewSelectOptionsResult;
 import com.suncreate.shinyportal.util.EventUtil;
 import com.suncreate.shinyportal.util.PickerViewUtils;
 import com.suncreate.shinyportal.util.RecyclerViewHelper;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
 import com.zds.base.json.FastJsonUtil;
@@ -111,6 +111,8 @@ public class EventListFragment extends BaseFragment {
     LinearLayout llSelect;
     @BindView(R.id.all)
     LinearLayout all;
+    @BindView(R.id.tv_reset_time)
+    TextView tvResetTime;
 
 
     private List<EventMenuInfo> mList;
@@ -232,6 +234,13 @@ public class EventListFragment extends BaseFragment {
     }
 
     private void initClick() {
+        tvResetTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvTimeStart.setText("");
+                tvTimeEnd.setText("");
+            }
+        });
         tvFj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -408,7 +408,7 @@ public class MapActivity extends BaseActivity {
 
 
         DatasourceConnectionInfo dsInfo = new DatasourceConnectionInfo();
-        dsInfo.setServer("http://112.29.172.100:8090/iserver/services/map-tpk-gljd/rest/maps/gljd");
+        dsInfo.setServer("http://112.29.172.100:14438/iserver/services/map-tpk-LAERDT/rest/maps/LAERDT");
         dsInfo.setEngineType(EngineType.Rest);
         dsInfo.setAlias("ChinaRest");
         Datasource ds = m_wokspace.getDatasources().open(dsInfo);
@@ -457,7 +457,7 @@ public class MapActivity extends BaseActivity {
                         callOut.setLocation(longitude, latitude);
 
                         ImageView imageView = new ImageView(MapActivity.this);
-                        imageView.setBackgroundResource(R.mipmap.dw);
+                        imageView.setBackgroundResource(R.mipmap.ic_supermap_location);
                         imageView.setMaxWidth(40);
                         imageView.setMaxHeight(40);
                         callOut.setContentView(imageView);

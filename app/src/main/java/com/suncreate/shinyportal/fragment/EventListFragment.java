@@ -244,6 +244,8 @@ public class EventListFragment extends BaseFragment {
         tvFj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 if (fjList == null || fjList.size() == 0) {
                     ToastUtil.toast("暂无分局数据，请稍后再试！");
                     return;
@@ -269,6 +271,8 @@ public class EventListFragment extends BaseFragment {
         tvPcs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 if (pcsList == null || pcsList.size() == 0) {
                     ToastUtil.toast("暂无派出所数据！");
                     return;
@@ -363,6 +367,8 @@ public class EventListFragment extends BaseFragment {
         tvTimeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 //开始时间
                 Calendar nowDate = Calendar.getInstance();
                 //时间选择器
@@ -397,6 +403,8 @@ public class EventListFragment extends BaseFragment {
         tvTimeEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 //结束时间
                 Calendar nowDate = Calendar.getInstance();
                 //时间选择器

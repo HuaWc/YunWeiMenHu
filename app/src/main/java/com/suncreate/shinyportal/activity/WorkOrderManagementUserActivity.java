@@ -502,6 +502,8 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         tvFj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 if (fjList == null || fjList.size() == 0) {
                     ToastUtil.toast("暂无分局数据，请稍后再试！");
                     return;
@@ -527,6 +529,8 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         tvPcs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 if (pcsList == null || pcsList.size() == 0) {
                     ToastUtil.toast("暂无派出所数据！");
                     return;
@@ -635,6 +639,8 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         tvTimeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 //开始时间
                 Calendar nowDate = Calendar.getInstance();
                 //时间选择器
@@ -669,6 +675,8 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         tvTimeEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 //结束时间
                 Calendar nowDate = Calendar.getInstance();
                 //时间选择器
@@ -709,6 +717,8 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         tvClzt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 if (optionsList4 == null || optionsList4.size() == 0) {
                     ToastUtil.toast("选项为空，请稍等重试");
                     return;
@@ -730,6 +740,8 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         tvShzt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 if (optionsList5 == null || optionsList5.size() == 0) {
                     ToastUtil.toast("选项为空，请稍等重试");
                     return;

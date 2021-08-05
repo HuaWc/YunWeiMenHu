@@ -453,6 +453,8 @@ public class WorkOrderHandleActivity extends BaseActivity {
         tv26.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 //选择原设备状态
                 if (optionList == null || optionList.size() == 0) {
                     ToastUtil.toast("状态值为空，请稍后再试！");

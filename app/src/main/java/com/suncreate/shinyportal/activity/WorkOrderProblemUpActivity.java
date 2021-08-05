@@ -135,6 +135,8 @@ public class WorkOrderProblemUpActivity extends BaseActivity {
     TextView tvPdRemark;
     @BindView(R.id.et_sm1)
     EditText etSm1;
+    @BindView(R.id.tv24)
+    TextView tv24;
 
     private String id;
     private FaultMapInfo info;
@@ -230,6 +232,7 @@ public class WorkOrderProblemUpActivity extends BaseActivity {
         tv21.setText(StringUtil.isEmpty(info.getMap().getClosedLoopStatusName()) ? "工单还未闭环" : info.getMap().getClosedLoopStatusName());//闭环状态
         tv22.setText(StringUtil.isEmpty(info.getMap().getTimeoutTime()) ? "" : info.getMap().getTimeoutTime());//超时闭环时间
         tv23.setText(StringUtil.isEmpty(info.getAlarmRemark()) ? "" : info.getAlarmRemark());//告警发生原因
+        tv24.setText(StringUtil.isEmpty(info.getRemark()) ? "" : info.getRemark());//说明
 
 
     }
@@ -285,6 +288,8 @@ public class WorkOrderProblemUpActivity extends BaseActivity {
         tvXtclr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 //协同处理人选择
                 if (helpPeopleOptions == null || helpPeopleOptions.size() == 0) {
                     ToastUtil.toast("选项为空或获取数据错误，请稍后重试");
@@ -313,6 +318,8 @@ public class WorkOrderProblemUpActivity extends BaseActivity {
         tvTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 //处理截止时间
                 Calendar nowDate = Calendar.getInstance();
                 //时间选择器
@@ -340,6 +347,8 @@ public class WorkOrderProblemUpActivity extends BaseActivity {
         tvClr2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 //新增处理人选择
                 if (addPeopleOptions == null || addPeopleOptions.size() == 0) {
                     ToastUtil.toast("选项为空或获取数据错误，请稍后重试");

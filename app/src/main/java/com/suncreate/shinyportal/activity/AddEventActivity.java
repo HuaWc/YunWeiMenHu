@@ -185,6 +185,8 @@ public class AddEventActivity extends BaseActivity {
         tvTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
                 Calendar nowDate = Calendar.getInstance();
                 //时间选择器
                 TimePickerView pvTime = new TimePickerBuilder(AddEventActivity.this, new OnTimeSelectListener() {

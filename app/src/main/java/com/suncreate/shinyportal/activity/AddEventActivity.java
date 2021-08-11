@@ -191,10 +191,15 @@ public class AddEventActivity extends BaseActivity {
                 //时间选择器
                 TimePickerView pvTime = new TimePickerBuilder(AddEventActivity.this, new OnTimeSelectListener() {
                     public void onTimeSelect(final Date date, View v) {
+                        if (nowDate.getTime().getTime() < date.getTime()) {
+                            //当前选择时间晚于当前时间
+                            ToastUtil.toast("选择时间不能晚于当前时间");
+                            return;
+                        }
                         tvTime.setText(formatter.format(date));
                     }
                 }).setDate(nowDate)//设置系统时间为当前时间
-                        .setRangDate(null,nowDate)
+                        .setRangDate(null, nowDate)
                         .setType(new boolean[]{true, true, true, true, true, true})//设置年月日时分秒是否显示 true:显示 false:隐藏
                         //.setLabel("年", "月", "日", "时", "分", "秒")
                         .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。

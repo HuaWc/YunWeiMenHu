@@ -302,8 +302,6 @@ public class EventManagementActivity extends BaseActivity {
         ivAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toTheActivity(AddEventActivity.class);
-
                 showDialog();
             }
         });
@@ -920,7 +918,7 @@ public class EventManagementActivity extends BaseActivity {
 
     }
 
-    @Override
+    @Override 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation

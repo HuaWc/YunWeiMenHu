@@ -46,6 +46,26 @@ public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void initLogic() {
+/*        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //do something
+                if (MyApplication.getInstance().checkUser()) {
+                    if (MyApplication.getInstance().getUserInfo().isRemember()) {
+                        toTheActivity(MainActivity.class);
+                    } else {
+                        MyApplication.getInstance().cleanUserInfo();
+                        toTheActivity(LoginActivity.class);
+                    }
+                } else {
+                    MyApplication.getInstance().cleanUserInfo();
+                    toTheActivity(LoginActivity.class);
+                }
+
+                finish();
+
+            }
+        }, 3000);*/
         //imgWelcome.setImageResource(R.mipmap.img_welcome);
         initSuperMapData();
     }

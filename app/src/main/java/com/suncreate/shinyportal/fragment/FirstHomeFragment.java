@@ -1,6 +1,7 @@
 package com.suncreate.shinyportal.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
 import com.zds.base.util.StringUtil;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
@@ -139,6 +141,7 @@ public class FirstHomeFragment extends BaseFragment {
                 break;
             case R.id.ll_dzdt:
                 //电子地图
+                //checkMapFile();
                 toTheActivity(MapActivity.class);
                 break;
             case R.id.ll_zxbz:
@@ -152,6 +155,20 @@ public class FirstHomeFragment extends BaseFragment {
             case R.id.ll_jqqd:
                 ToastUtil.toast("敬请期待");
                 break;
+        }
+    }
+
+    private void checkMapFile() {
+        //检验凭证
+        String rootPath = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+        String filePath = rootPath + "/Mobile GIS/License/SuperMap iMobile Trial Laptop-Owner-Christ-20210727.slm";
+        File file = new File(filePath);
+        if (file.exists()) {
+            //存在
+            toTheActivity(MapActivity.class);
+        } else {
+            //不存在
+            ToastUtil.toast("地图凭证未准备好，请重启应用后重试");
         }
     }
 }

@@ -35,7 +35,7 @@ public class SelfAppContext extends Application {
         Utils.init(this);
         Tiny.getInstance().init(this);
         initOkGo();
-        CrashReport.initCrashReport(getApplicationContext());
+        //CrashReport.initCrashReport(getApplicationContext());
     }
 
     public static SelfAppContext getInstance() {

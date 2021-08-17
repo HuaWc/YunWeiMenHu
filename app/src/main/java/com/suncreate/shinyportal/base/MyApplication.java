@@ -78,7 +78,7 @@ public class MyApplication extends SelfAppContext {
         applicationContext = this;
         instance = this;
         init();
-        JPushInterface.init(this);
+        //JPushInterface.init(this);
         GDLocationUtil.init(this);
 
     }
@@ -99,13 +99,13 @@ public class MyApplication extends SelfAppContext {
         // 下拉刷新上拉加载
         setRefush();
         // 版本更新
-        setUpDataApp();
+        //setUpDataApp();
         // util
         Utils.init(this);
         //七牛
-        uploadManager = new UploadManager(new Configuration.Builder().build());
+        //uploadManager = new UploadManager(new Configuration.Builder().build());
         //bugly bug
-        CrashReport.initCrashReport(getApplicationContext(), "42a24f434c", false);
+        //CrashReport.initCrashReport(getApplicationContext(), "42a24f434c", false);
     }
 
 

@@ -289,7 +289,4 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    public static String SDCARD = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
-
-
 }

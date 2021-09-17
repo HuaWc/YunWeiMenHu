@@ -1,10 +1,12 @@
 package com.suncreate.shinyportal.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -17,6 +19,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anhui.police.auth.sdk.AuthSDK;
+import com.anhui.police.market.callback.AbstractMarketResult;
+import com.anhui.police.market.sdk.MarketConfigure;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.suncreate.shinyportal.base.MyApplication;
@@ -87,7 +92,8 @@ public class MainActivity extends BaseActivity {
     protected void initLogic() {
         //initSuperMapData();
         initTab();
-        getRole();
+        marketCheckUpdate();
+        //getRole();
     }
 
     /**
@@ -169,6 +175,45 @@ public class MainActivity extends BaseActivity {
         });
 
 
+    }
+
+
+    private void marketCheckUpdate(){
+        //设置检查应用更新的处理方式
+        MarketConfigure.setUpgradeMethod(true,getResources().getColor(R.color.colorPrimary));
+        //Boolean isCheckTestReleaseApp ①:设置false检查正式发布版本应用更新，设置为 true则是检查测试发布版本应用更新；
+        MarketConfigure.detectAppUpdates(MainActivity.this, false, "", new AbstractMarketResult() {
+            @Override
+            public void onResult(String result, boolean upgrade) {
+
+            }
+
+            @Override
+            public void onConfirm(int stateType) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onWarning() {
+
+            }
+
+            @Override
+            public void onResult(String result) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        MarketConfigure.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

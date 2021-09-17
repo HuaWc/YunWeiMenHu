@@ -36,10 +36,10 @@ public class FirstPersonalFragment extends BaseFragment {
     TextView tvName;
     @BindView(R.id.tv_account)
     TextView tvAccount;
-    @BindView(R.id.tv_phone)
-    TextView tvPhone;
-    @BindView(R.id.tv_email)
-    TextView tvEmail;
+    @BindView(R.id.tv_org)
+    TextView tvOrg;
+    @BindView(R.id.tv_id)
+    TextView tvId;
     @BindView(R.id.tv_ip)
     TextView tvIp;
     @BindView(R.id.tv_time)
@@ -67,8 +67,8 @@ public class FirstPersonalFragment extends BaseFragment {
         initClick();
         tvName.setText(MyApplication.getInstance().getUserInfo().getRealName());
         tvAccount.setText(StringUtil.isEmpty(MyApplication.getInstance().getUserInfo().getUserName()) ? "暂无信息" : MyApplication.getInstance().getUserInfo().getUserName());
-        tvPhone.setText(StringUtil.isEmpty(MyApplication.getInstance().getUserInfo().getMobileNo()) ? "暂无信息" : MyApplication.getInstance().getUserInfo().getMobileNo());
-        tvEmail.setText(StringUtil.isEmpty(MyApplication.getInstance().getUserInfo().getEmail()) ? "暂无信息" : MyApplication.getInstance().getUserInfo().getEmail());
+        tvOrg.setText(StringUtil.isEmpty(MyApplication.getInstance().getUserInfo().getOrgname()) ? "暂无信息" : MyApplication.getInstance().getUserInfo().getOrgname());
+        tvId.setText(StringUtil.isEmpty(MyApplication.getInstance().getUserInfo().getIdCard()) ? "暂无信息" : MyApplication.getInstance().getUserInfo().getIdCard());
 //        tvIp.setText(StringUtil.isEmpty(MyApplication.getInstance().getUserInfo().getMap().getIpAdress()) ? "" : MyApplication.getInstance().getUserInfo().getMap().getIpAdress());
         tvTime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(MyApplication.getInstance().getUserInfo().getLoginTime())));
 
@@ -80,7 +80,7 @@ public class FirstPersonalFragment extends BaseFragment {
         tvLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logout();
+                //logout();
             }
         });
     }

@@ -435,7 +435,10 @@ public class AppConfig {
      */
     public static final String getCameraImgCommon = mainUrl + "v1/operation/PtCameraInfo/getCameraImgCommon";
 
-
+    /**
+     * 获取工单图片base64编码接口
+     */
+    public static final String checkToken = mainUrl + "v1/operation/checkToken";
 
 
 

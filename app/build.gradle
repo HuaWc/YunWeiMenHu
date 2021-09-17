@@ -80,6 +80,11 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -163,12 +168,7 @@ dependencies {
         implementation rootProject.ext.dependencies["location"]
     //    implementation rootProject.ext.dependencies["search"]
     //    implementation rootProject.ext.dependencies["3dmap"]
-    //支付
-    implementation files('libs/alipaySdk-20180403.jar')
 
-    //超图sdk
-    implementation files('libs/com.supermap.data_v1012.jar')
-    implementation files('libs/com.supermap.mapping_v1012.jar')
 
     //banner
     implementation 'com.zhy:magic-viewpager:1.0.1'
@@ -183,4 +183,10 @@ dependencies {
     implementation rootProject.ext.dependencies["scanplus"]
     implementation rootProject.ext.dependencies["AndroidFilePicker"]
     implementation rootProject.ext.dependencies["PhotoPick-Master"]
+
+
+    implementation(name:'market_sdk_v1.1.11.020117', ext:'aar')//应用中心
+
+    implementation(name:'authsdk_v1.1.7.2020_062912', ext:'aar')//统一认证
+
 }

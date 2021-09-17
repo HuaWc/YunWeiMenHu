@@ -20,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.multidex.MultiDex;
@@ -28,7 +29,12 @@ import androidx.core.content.ContextCompat;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 
+import com.anhui.police.auth.sdk.AuthConfig;
+import com.anhui.police.auth.sdk.AuthSDK;
+import com.anhui.police.auth.sdk.AuthType;
+import com.anhui.police.market.sdk.MarketConfigure;
 import com.suncreate.shinyportal.activity.LoginActivity;
+import com.suncreate.shinyportal.activity.WelcomeActivity;
 import com.suncreate.shinyportal.entity.UserInfo;
 import com.suncreate.shinyportal.entity.VersionInfo;
 import com.suncreate.shinyportal.http.AppConfig;
@@ -59,6 +65,9 @@ import com.zds.base.util.Utils;
 import com.zxy.tiny.Tiny;
 import com.zxy.tiny.callback.FileCallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.jpush.android.api.JPushInterface;
 
 
@@ -81,7 +90,15 @@ public class MyApplication extends SelfAppContext {
         //JPushInterface.init(this);
         GDLocationUtil.init(this);
 
+
     }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        AuthSDK.getDefault().onTerminate();
+    }
+
     private IWXAPI mIWXAPI;
 
     public IWXAPI registerWx() {
@@ -106,6 +123,18 @@ public class MyApplication extends SelfAppContext {
         //uploadManager = new UploadManager(new Configuration.Builder().build());
         //bugly bug
         //CrashReport.initCrashReport(getApplicationContext(), "42a24f434c", false);
+        initMarket();
+        initAuth();
+    }
+
+    private void initMarket() {
+        MarketConfigure.init(this, "96b4d514ed3349f4ac72bb4c6824e364", MarketConfigure.MarketDeviceType.DEVICE_TYPE_PHONE);
+        MarketConfigure.setLogEnabled(true);
+        MarketConfigure.setUpgradeMethod(true, this.getResources().getColor(R.color.colorPrimary));
+    }
+
+    private void initAuth() {
+        AuthSDK.init("7a12e6a15a58441e8fc34bb5ab902cab", this);
     }
 
 
@@ -137,6 +166,16 @@ public class MyApplication extends SelfAppContext {
     public int getVersionCode() {
         return getPackageInfo().versionCode;
     }
+
+    /**
+     * 获取AppId
+     *
+     * @return
+     */
+    public String getApplicationId() {
+        return getPackageInfo().packageName;
+    }
+
 
     /**
      * 获取App安装包信息
@@ -182,6 +221,7 @@ public class MyApplication extends SelfAppContext {
         UserInfo userInfo = getUserInfo();
         return userInfo.getToken();
     }
+
     private CommonDialog commonDialog;
 
 
@@ -226,7 +266,7 @@ public class MyApplication extends SelfAppContext {
             if (checkUser()) {
                 cookieManager.setCookie(url
                         , "70b9___ewei_shopv2_member_session_1=" + getUserInfo().getToken() + ";path=/");//cookies是在HttpClient中获得的cookie
-            }else {
+            } else {
                 cookieManager.setCookie(url
                         , "70b9___ewei_shopv2_member_session_1=;path=/");//cookies是在HttpClient中获得的cookie
 
@@ -298,8 +338,15 @@ public class MyApplication extends SelfAppContext {
 
 
     public void toLogin(Context context) {
-        ActivityStackManager.getInstance().killAllActivity();
+/*        ActivityStackManager.getInstance().killAllActivity();
         Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        ToastUtil.toast("登录已失效，请您重新登陆~");*/
+
+
+        ActivityStackManager.getInstance().killAllActivity();
+        Intent intent = new Intent(context, WelcomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         ToastUtil.toast("登录已失效，请您重新登陆~");

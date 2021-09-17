@@ -1,30 +1,44 @@
 package com.suncreate.shinyportal.activity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Handler;
 
 import android.os.Looper;
+import android.util.Log;
 import android.widget.ImageView;
 
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.anhui.police.auth.sdk.AuthSDK;
+import com.anhui.police.auth.sdk.AuthUser;
+import com.anhui.police.auth.sdk.IAuthListener;
+import com.anhui.police.auth.sdk.ITokenListener;
 import com.github.dfqin.grantor.PermissionListener;
 import com.github.dfqin.grantor.PermissionsUtil;
 import com.suncreate.shinyportal.R;
 import com.suncreate.shinyportal.base.BaseActivity;
 import com.suncreate.shinyportal.base.MyApplication;
+import com.suncreate.shinyportal.entity.UserInfo;
+import com.suncreate.shinyportal.http.ApiClient;
+import com.suncreate.shinyportal.http.AppConfig;
+import com.suncreate.shinyportal.http.ResultListener;
 import com.supermap.data.Environment;
 import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
+import com.zds.base.json.FastJsonUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +49,9 @@ import butterknife.ButterKnife;
 public class WelcomeActivity extends BaseActivity {
     @BindView(R.id.img_welcome)
     ImageView imgWelcome;
+
+    private String getToken = null;
+
 
     public static String SDCARD = android.os.Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
 
@@ -70,7 +87,7 @@ public class WelcomeActivity extends BaseActivity {
         initSuperMapData();
     }
 
-    private void executeDataAndStart(){
+    private void executeDataAndStart() {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -78,7 +95,9 @@ public class WelcomeActivity extends BaseActivity {
                 Environment.setLicensePath(rootPath + "/Mobile GIS/License/");
                 Environment.initialization(WelcomeActivity.this);
                 Environment.setOpenGLMode(true);
-                if (MyApplication.getInstance().checkUser()) {
+
+
+/*                if (MyApplication.getInstance().checkUser()) {
                     if (MyApplication.getInstance().getUserInfo().isRemember()) {
                         toTheActivity(MainActivity.class);
                     } else {
@@ -88,12 +107,13 @@ public class WelcomeActivity extends BaseActivity {
                 } else {
                     MyApplication.getInstance().cleanUserInfo();
                     toTheActivity(LoginActivity.class);
-                }
+                }*/
 
-                finish();
+                newAuthLogin();
+
 
             }
-        },1500);
+        }, 1500);
     }
 
 
@@ -110,7 +130,7 @@ public class WelcomeActivity extends BaseActivity {
                     CopyFiles("Mobile GIS", SDCARD + "Mobile GIS");
                 } catch (Exception e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     executeDataAndStart();
                 }
             }
@@ -155,6 +175,74 @@ public class WelcomeActivity extends BaseActivity {
         return true;
     }
 
+    private void newAuthLogin() {
+        AuthSDK.getDefault().getToken(WelcomeActivity.this, new ITokenListener() {
+            @Override
+            public void onSuccess(int code, String token) {
+                getToken = token;
+                AuthSDK.getDefault().getUserInfo(WelcomeActivity.this, getToken, new IAuthListener() {
+                    @Override
+                    public void onAuthError(int errorCode, @Nullable String errorMsg) {
+                        Log.e("mistake", String.format("err: code = %s, msg = %s", errorCode, errorMsg));
+                        ToastUtil.toast(errorMsg);
+
+                    }
+
+                    @Override
+                    public void onSuccess(String token, @Nullable AuthUser user, @Nullable String level) {
+                        //成功获得用户信息，对用关乎信息进行操作
+                        Map<String,Object> hashMap = new HashMap<>();
+                        hashMap.put("userName",user.getUserName());
+                        hashMap.put("realName",user.getRealName());
+                        hashMap.put("orgId",user.getOrgId());
+                        hashMap.put("orgName",user.getOrgName());
+                        hashMap.put("phoneNum",user.getPhoneNum());
+                        hashMap.put("workPhone",user.getWorkPhone());
+                        hashMap.put("email",user.getEmail());
+                        hashMap.put("code",user.getCode());
+                        hashMap.put("policeTypeId",user.getPoliceTypeId());
+                        hashMap.put("policeTypeName",user.getPoliceTypeName());
+                        hashMap.put("userNum",user.getUserNum());
+                        hashMap.put("token",token);
+                        ApiClient.requestNetPost(WelcomeActivity.this, AppConfig.checkToken, "加载中", hashMap, new ResultListener() {
+                            @Override
+                            public void onSuccess(String json, String msg) {
+                                ToastUtil.toast(msg);
+                                UserInfo userInfo = FastJsonUtil.getObject(json, UserInfo.class);
+                                if (userInfo != null) {
+                                    //储存用户信息
+                                    MyApplication.getInstance().cleanUserInfo();
+                                    MyApplication.getInstance().saveUserInfo(userInfo);
+                                    toTheActivity(MainActivity.class);
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(String msg) {
+                                ToastUtil.toast(msg);
+                            }
+                        });
+
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onError(int errorCode, String errorMsg) {
+                Log.e("mistake", String.format("err: code = %s, msg = %s", errorCode, errorMsg));
+                ToastUtil.toast(errorMsg);
+            }
+        });
+    }
+
+
+    private void login() {
+
+    }
+
 
     @Override
     protected void onEventComing(EventCenter center) {
@@ -171,5 +259,11 @@ public class WelcomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        AuthSDK.getDefault().onActivityResult(requestCode, resultCode, data);
     }
 }

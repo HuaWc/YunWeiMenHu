@@ -33,7 +33,6 @@ import com.suncreate.shinyportal.http.ResultListener;
 import com.suncreate.shinyportal.updata.CretinAutoUpdateUtils;
 import com.suncreate.shinyportal.R;
 import com.suncreate.shinyportal.base.BaseActivity;
-import com.supermap.data.Environment;
 import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
 

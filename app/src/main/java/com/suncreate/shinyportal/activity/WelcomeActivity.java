@@ -27,7 +27,6 @@ import com.suncreate.shinyportal.entity.UserInfo;
 import com.suncreate.shinyportal.http.ApiClient;
 import com.suncreate.shinyportal.http.AppConfig;
 import com.suncreate.shinyportal.http.ResultListener;
-import com.supermap.data.Environment;
 import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
 import com.zds.base.json.FastJsonUtil;
@@ -84,10 +83,16 @@ public class WelcomeActivity extends BaseActivity {
             }
         }, 3000);*/
         //imgWelcome.setImageResource(R.mipmap.img_welcome);
-        initSuperMapData();
+        //initSuperMapData();
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                newAuthLogin();
+            }
+        }, 2500);
     }
 
-    private void executeDataAndStart() {
+/*    private void executeDataAndStart() {
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -97,7 +102,7 @@ public class WelcomeActivity extends BaseActivity {
                 Environment.setOpenGLMode(true);
 
 
-/*                if (MyApplication.getInstance().checkUser()) {
+*//*                if (MyApplication.getInstance().checkUser()) {
                     if (MyApplication.getInstance().getUserInfo().isRemember()) {
                         toTheActivity(MainActivity.class);
                     } else {
@@ -107,7 +112,7 @@ public class WelcomeActivity extends BaseActivity {
                 } else {
                     MyApplication.getInstance().cleanUserInfo();
                     toTheActivity(LoginActivity.class);
-                }*/
+                }*//*
 
                 newAuthLogin();
 
@@ -173,7 +178,7 @@ public class WelcomeActivity extends BaseActivity {
             }
         }
         return true;
-    }
+    }*/
 
     private void newAuthLogin() {
         AuthSDK.getDefault().getToken(WelcomeActivity.this, new ITokenListener() {
@@ -237,12 +242,6 @@ public class WelcomeActivity extends BaseActivity {
             }
         });
     }
-
-
-    private void login() {
-
-    }
-
 
     @Override
     protected void onEventComing(EventCenter center) {

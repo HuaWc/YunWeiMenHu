@@ -626,7 +626,9 @@ public class MapActivity extends BaseActivity {
 package com.suncreate.shinyportal.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -665,6 +667,8 @@ import com.suncreate.shinyportal.util.PositionUtil;
 import com.supermap.imobilelite.maps.CoordinateReferenceSystem;
 import com.supermap.imobilelite.maps.DefaultItemizedOverlay;
 import com.supermap.imobilelite.maps.LayerView;
+import com.supermap.imobilelite.maps.LocationChangedListener;
+import com.supermap.imobilelite.maps.LocationManagePlugin;
 import com.supermap.imobilelite.maps.MapController;
 import com.supermap.imobilelite.maps.MapView;
 import com.supermap.imobilelite.maps.OverlayItem;
@@ -678,6 +682,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -743,9 +748,11 @@ public class MapActivity extends BaseActivity {
     private Map<String, DefaultItemizedOverlay> pointList;
 
     // SuperMap iServer提供的地图采用固定地址传递
-    private static final String MAP_URL = "http://36.155.117.91:38000/iserver/services/map-tpk-LAERDT/rest/maps/LAERDT";
+    private static final String MAP_URL = "http://20.90.100.10:38000/iserver/services/map-tpk-LAERDT/rest/maps/LAERDT";
 
     private MapController mapController= null;
+    private double longitude;
+    private double latitude;
 
     @Override
     protected void initContentView(Bundle bundle) {
@@ -1136,7 +1143,7 @@ public class MapActivity extends BaseActivity {
         PermissionsUtil.requestPermission(this, new PermissionListener() {
             @Override
             public void permissionGranted(@NonNull String[] permission) {
-                GDLocationUtil.getLocation(new GDLocationUtil.MyLocationListener() {
+/*                GDLocationUtil.getLocation(new GDLocationUtil.MyLocationListener() {
                     @Override
                     public void result(AMapLocation location) {
                         double longitude = location.getLongitude();
@@ -1155,7 +1162,8 @@ public class MapActivity extends BaseActivity {
 
 
                     }
-                });
+                });*/
+                getLocation();
             }
 
             @Override
@@ -1164,6 +1172,41 @@ public class MapActivity extends BaseActivity {
             }
         }, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
 
+    }
+
+    /**
+     * 开启定位
+     */
+    public void getLocation() {
+        LocationManagePlugin locationManagePlugin = new LocationManagePlugin();
+        boolean openGpsDeviceState = locationManagePlugin.openGpsDevice((LocationManager) Objects.requireNonNull(getSystemService(Context.LOCATION_SERVICE)));
+        if (openGpsDeviceState) {
+//            locationManagePlugin.setTimeInterval(5000);
+            locationManagePlugin.addLocationChangedListener(new LocationChangedListener() {
+                @Override
+                public void locationChanged(LocationManagePlugin.GPSData gpsData, LocationManagePlugin.GPSData gpsData1) {
+                    if (gpsData1 != null) {
+                        longitude = gpsData1.dLongitude;
+                        latitude = gpsData1.dLatitude;
+                        //Gps gps = PositionUtil.gcj_To_Wgs84(latitude, longitude);
+                        setSuperMapCenter(longitude, latitude, true);
+
+                        Drawable drawable = getResources().getDrawable(R.mipmap.ic_supermap_location);
+                        DefaultItemizedOverlay locationOverlay = new DefaultItemizedOverlay(drawable);
+                        locationOverlay.setKey("location_my_point");
+                        locationOverlay.addItem(new OverlayItem(new Point2D(longitude, latitude),
+                                "center", "location_my_point"));
+                        m_mapView.getOverlays().add(locationOverlay);
+                        pointList.put("location_my_point", locationOverlay);
+                    }
+                }
+
+                @Override
+                public void locationChanged(LocationManagePlugin.GPSData gpsData, LocationManagePlugin.GPSData gpsData1, boolean b) {
+
+                }
+            });
+        }
     }
 
 
@@ -1188,7 +1231,7 @@ public class MapActivity extends BaseActivity {
     }
 
     public void locate() {
-        if (pointList.containsKey("location_my_point")) {
+        /*if (pointList.containsKey("location_my_point")) {
             double longitude = pointList.get("location_my_point").getCenter().getX();
             double latitude = pointList.get("location_my_point").getCenter().getY();
             mapController.setCenter(new Point2D(longitude, latitude));
@@ -1196,7 +1239,7 @@ public class MapActivity extends BaseActivity {
             PermissionsUtil.requestPermission(this, new PermissionListener() {
                 @Override
                 public void permissionGranted(@NonNull String[] permission) {
-                    GDLocationUtil.getLocation(new GDLocationUtil.MyLocationListener() {
+                    *//*GDLocationUtil.getLocation(new GDLocationUtil.MyLocationListener() {
                         @Override
                         public void result(AMapLocation location) {
                             double longitude = location.getLongitude();
@@ -1212,7 +1255,8 @@ public class MapActivity extends BaseActivity {
                             m_mapView.getOverlays().add(locationOverlay);
                             pointList.put("location_my_point", locationOverlay);
                         }
-                    });
+                    });*//*
+                    getLocation();
                 }
 
                 @Override
@@ -1220,8 +1264,12 @@ public class MapActivity extends BaseActivity {
                     ToastUtil.toast("未开启定位权限");
                 }
             }, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+        }*/
+        if (longitude > 0 && latitude > 0){
+            m_mapView.getController().setCenter(new Point2D(longitude, latitude));
+        }else {
+            ToastUtil.toast("正在定位中");
         }
-
     }
 
     private void showSingleCamera(int position, TreeCamera camera) {

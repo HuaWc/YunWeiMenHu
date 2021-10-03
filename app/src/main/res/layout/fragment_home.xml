@@ -243,6 +243,7 @@
                     android:layout_weight="1"
                     app:cardCornerRadius="@dimen/dp_13"
                     app:cardElevation="@dimen/dp_2"
+                    android:visibility="invisible"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout

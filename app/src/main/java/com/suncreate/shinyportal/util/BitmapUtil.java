@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 import com.zds.base.util.DensityUtils;
 import com.zds.base.util.UriUtil;
@@ -156,6 +157,37 @@ public class BitmapUtil {
                 context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
                 Uri uri2 = UriUtil.getUri(context, file);
                 context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri2));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
+    }
+
+    public static void saveBitmapInFile(Context context, final Bitmap bitmap, String packageName) {
+        try {
+            String storePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + packageName;
+            File appDir = new File(storePath);
+            if (!appDir.exists()) {
+                appDir.mkdir();
+            }
+            String fileName = System.currentTimeMillis() + ".jpg";
+            File file = new File(appDir, fileName);
+            try {
+                FileOutputStream fos = new FileOutputStream(file);
+                //通过io流的方式来压缩保存图片
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                fos.close();
+                //把文件插入到系统图库
+                MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
+                //保存图片后发送广播通知更新数据库
+                Uri uri = Uri.fromFile(file);
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+                Uri uri2 = UriUtil.getUri(context, file);
+                context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri2));
+                Toast.makeText(context, "成功保存二维码到" + file.getPath(), Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }

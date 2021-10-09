@@ -93,7 +93,6 @@ public class AppConfig {
      */
     public static final String mapKeywords = mainUrl + "v1/operation/PtCameraInfo/mapKeywords";
 
-
     /**
      * 新增相机界面所需的字典信息
      */

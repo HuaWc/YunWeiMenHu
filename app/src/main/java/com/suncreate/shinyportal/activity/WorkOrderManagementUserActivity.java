@@ -210,7 +210,7 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         pcsList.clear();
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("areaCode", id);
-        ApiClient.requestNetGet(this, AppConfig.pcsList, "", hashMap, new ResultListener() {
+        ApiClient.requestNetGet(this, AppConfig.pcsList, "加载中", hashMap, new ResultListener() {
             @Override
             public void onSuccess(String json, String msg) {
                 List<DAPcs> list = FastJsonUtil.getList(json, DAPcs.class);

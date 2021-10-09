@@ -666,6 +666,7 @@ import com.suncreate.shinyportal.util.GDLocationUtil;
 import com.suncreate.shinyportal.util.PositionUtil;
 import com.supermap.imobilelite.maps.CoordinateReferenceSystem;
 import com.supermap.imobilelite.maps.DefaultItemizedOverlay;
+import com.supermap.imobilelite.maps.ItemizedOverlay;
 import com.supermap.imobilelite.maps.LayerView;
 import com.supermap.imobilelite.maps.LocationChangedListener;
 import com.supermap.imobilelite.maps.LocationManagePlugin;
@@ -860,6 +861,26 @@ public class MapActivity extends BaseActivity {
                 }
             }
         });
+        ll2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ll1.setVisibility(View.VISIBLE);
+                ll2.setVisibility(View.GONE);
+                ll3.setVisibility(View.GONE);
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
+            }
+        });
+        ll3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ll1.setVisibility(View.VISIBLE);
+                ll2.setVisibility(View.GONE);
+                ll3.setVisibility(View.GONE);
+                hideSoftKeyboard();
+                hideSoftKeyboard3();
+            }
+        });
     }
 
     private void initAdapter() {
@@ -874,7 +895,7 @@ public class MapActivity extends BaseActivity {
                 //搜索结果 直接进入相机详情
                 Bundle bundle = new Bundle();
                 bundle.putString("cameraId", searchItems.get(position).getId());
-                // toTheActivity(DossierDetailActivity.class, bundle);
+                toTheActivity(DossierDetailActivity.class, bundle);
             }
         });
 
@@ -1013,7 +1034,7 @@ public class MapActivity extends BaseActivity {
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("mapKeywords", etSearch3.getText().toString().trim());
         hashMap.put("pageNum", 1);
-        hashMap.put("pageSize", 20);
+        hashMap.put("pageSize", 10);
         ApiClient.requestNetPost(this, AppConfig.mapKeywords, "", hashMap, new ResultListener() {
             @Override
             public void onSuccess(String json, String msg) {
@@ -1292,12 +1313,20 @@ public class MapActivity extends BaseActivity {
         mapController.setCenter(new Point2D(g.getWgLon(), g.getWgLat()));
 
         Drawable drawable = getResources().getDrawable(R.mipmap.camera_point_icon);
-        DefaultItemizedOverlay locationOverlay = new DefaultItemizedOverlay(drawable);
-        locationOverlay.setKey(camera.getId());
-        locationOverlay.addItem(new OverlayItem(new Point2D(g.getWgLon(), g.getWgLat()),
+        DefaultItemizedOverlay cameraOverlay = new DefaultItemizedOverlay(drawable);
+        cameraOverlay.setKey(camera.getId());
+        cameraOverlay.addItem(new OverlayItem(new Point2D(g.getWgLon(), g.getWgLat()),
                 camera.getCameraName(), camera.getCameraCode()));
-        m_mapView.getOverlays().add(locationOverlay);
-        pointList.put(camera.getId(), locationOverlay);
+        cameraOverlay.setOnClickListener(new ItemizedOverlay.OnClickListener() {
+            @Override
+            public void onClicked(ItemizedOverlay itemizedOverlay, OverlayItem overlayItem) {
+                Bundle bundle = new Bundle();
+                bundle.putString("cameraId",itemizedOverlay.getKey());
+                toTheActivity(DossierDetailActivity.class, bundle);
+            }
+        });
+        m_mapView.getOverlays().add(cameraOverlay);
+        pointList.put(camera.getId(), cameraOverlay);
 
     }
 
@@ -1325,12 +1354,20 @@ public class MapActivity extends BaseActivity {
                 }
 
                 Drawable drawable = getResources().getDrawable(R.mipmap.camera_point_icon);
-                DefaultItemizedOverlay locationOverlay = new DefaultItemizedOverlay(drawable);
-                locationOverlay.setKey(t.getId());
-                locationOverlay.addItem(new OverlayItem(new Point2D(g.getWgLon(), g.getWgLat()),
+                DefaultItemizedOverlay cameraOverlay = new DefaultItemizedOverlay(drawable);
+                cameraOverlay.setKey(t.getId());
+                cameraOverlay.addItem(new OverlayItem(new Point2D(g.getWgLon(), g.getWgLat()),
                         t.getCameraName(), t.getCameraCode()));
-                m_mapView.getOverlays().add(locationOverlay);
-                pointList.put(t.getId(), locationOverlay);
+                cameraOverlay.setOnClickListener(new ItemizedOverlay.OnClickListener() {
+                    @Override
+                    public void onClicked(ItemizedOverlay itemizedOverlay, OverlayItem overlayItem) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("cameraId",itemizedOverlay.getKey());
+                        toTheActivity(DossierDetailActivity.class, bundle);
+                    }
+                });
+                m_mapView.getOverlays().add(cameraOverlay);
+                pointList.put(t.getId(), cameraOverlay);
 
 
             }

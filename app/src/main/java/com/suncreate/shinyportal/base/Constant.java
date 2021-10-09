@@ -40,6 +40,10 @@ public class Constant {
      */
     public static final String LOGIN_NAME = "login_name";
 
+    /**
+     * 生成二维码的前缀的域名
+     */
+    public static final String URL_PREFIX = "http://qrcode.iluan.com.cn/?positionCode=";
 
 
 }

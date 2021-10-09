@@ -21,7 +21,7 @@ public class GetDictDataHttp {
     public static void  getDictData(Context mContext,String dataTypeCode,  GetDictDataHttp.GetDictDataResult getDictDataResult) {
         Map<String, Object> params = new HashMap<>();
         params.put("dataTypeCode", dataTypeCode);
-        ApiClient.requestNetPost(mContext, AppConfig.getDataTypeList, "", params, new ResultListener() {
+        ApiClient.requestNetPost(mContext, AppConfig.getDataTypeList, "加载中", params, new ResultListener() {
             @Override
             public void onSuccess(String json, String msg) {
                 mList = FastJsonUtil.getList(json, DictInfo.class);

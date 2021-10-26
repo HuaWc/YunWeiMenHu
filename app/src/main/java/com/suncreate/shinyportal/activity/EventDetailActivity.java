@@ -6,19 +6,25 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.suncreate.shinyportal.R;
+import com.suncreate.shinyportal.adapter.AdapterCameraPhoto;
 import com.suncreate.shinyportal.base.BaseActivity;
 import com.suncreate.shinyportal.entity.EventMapInfo;
 import com.suncreate.shinyportal.http.ApiClient;
 import com.suncreate.shinyportal.http.AppConfig;
+import com.suncreate.shinyportal.http.GetWorkOrderImgHttp;
 import com.suncreate.shinyportal.http.ResultListener;
 import com.zds.base.entity.EventCenter;
 import com.zds.base.json.FastJsonUtil;
 import com.zds.base.util.StringUtil;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -86,9 +92,13 @@ public class EventDetailActivity extends BaseActivity {
     LinearLayout llS4;
     @BindView(R.id.ll13)
     LinearLayout ll13;
+    @BindView(R.id.tv_eva_title)
+    TextView tvEvaTitle;
 
     private String alarmId;
     private EventMapInfo info;
+    private List<String> photos;////工单附图
+    private AdapterCameraPhoto adapter;
 
     @Override
     protected void initContentView(Bundle bundle) {
@@ -146,7 +156,7 @@ public class EventDetailActivity extends BaseActivity {
         tv10.setText(StringUtil.isEmpty(info.getAlarmStatus()) ? "" : info.getAlarmStatus());
         tv11.setText(StringUtil.isEmpty(info.getAlarmTime()) ? "" : StringUtil.dealDateFormat(info.getAlarmTime()));
         tv12.setText(StringUtil.isEmpty(info.getIp()) ? "" : info.getIp());
-        if(StringUtil.isEmpty(info.getFaultType())){
+        if (StringUtil.isEmpty(info.getFaultType())) {
             ll13.setVisibility(View.GONE);
         } else {
             tv13.setText(StringUtil.isEmpty(info.getFaultType()) ? "" : info.getFaultType());
@@ -158,6 +168,12 @@ public class EventDetailActivity extends BaseActivity {
         } else {
             tv15.setText(info.getMap().getAlarmPersion());
             llPeople.setVisibility(View.VISIBLE);
+        }
+
+        if (info.getServiceRating() == null && info.getServiceRating2() == null && info.getServiceRating3() == null && info.getServiceRating4() == null) {
+            tvEvaTitle.setVisibility(View.GONE);
+        } else {
+            tvEvaTitle.setVisibility(View.VISIBLE);
         }
 
         if (StringUtil.isEmpty(info.getServiceRating())) {
@@ -187,6 +203,28 @@ public class EventDetailActivity extends BaseActivity {
             tvS4.setText(info.getServiceRating4());
             llS4.setVisibility(View.VISIBLE);
         }
+
+        getPhotoData();
+    }
+
+    private void getPhotoData() {
+        if (StringUtil.isEmpty(info.getPictureUrl())) {
+            return;
+        }
+        photos = new ArrayList<>();
+        adapter = new AdapterCameraPhoto(photos);
+        rvPhoto.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        rvPhoto.setAdapter(adapter);
+        GetWorkOrderImgHttp.getImgByFtpAddress(info.getPictureUrl(), this, new GetWorkOrderImgHttp.ImgDataListener() {
+            @Override
+            public void result(String json) {
+                String str = FastJsonUtil.getString(json, "imgPath");
+                if (!StringUtil.isEmpty(str)) {
+                    photos.addAll(Arrays.asList(str.split("!")));
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     @Override

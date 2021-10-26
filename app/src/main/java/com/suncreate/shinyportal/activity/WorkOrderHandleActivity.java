@@ -15,7 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.suncreate.shinyportal.R;
+import com.suncreate.shinyportal.adapter.AdapterCameraPhoto;
 import com.suncreate.shinyportal.adapter.CommonImageAdapter;
 import com.suncreate.shinyportal.base.BaseActivity;
 import com.suncreate.shinyportal.entity.AssetEquipment;
@@ -24,6 +28,7 @@ import com.suncreate.shinyportal.entity.FaultMapInfo;
 import com.suncreate.shinyportal.http.ApiClient;
 import com.suncreate.shinyportal.http.AppConfig;
 import com.suncreate.shinyportal.http.GetDictDataHttp;
+import com.suncreate.shinyportal.http.GetWorkOrderImgHttp;
 import com.suncreate.shinyportal.http.ResultListener;
 import com.suncreate.shinyportal.http.UploadWorkOrderImgHttp;
 import com.suncreate.shinyportal.interfaces.PickerViewSelectOptionsResult;
@@ -32,9 +37,6 @@ import com.suncreate.shinyportal.util.PickerViewUtils;
 import com.suncreate.shinyportal.util.RecyclerViewHelper;
 import com.suncreate.shinyportal.view.dialog.CommonTipDialog;
 import com.suncreate.shinyportal.view.dialog.PictureSelectDialogUtils;
-import com.luck.picture.lib.PictureSelector;
-import com.luck.picture.lib.config.PictureConfig;
-import com.luck.picture.lib.entity.LocalMedia;
 import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
 import com.zds.base.json.FastJsonUtil;
@@ -44,6 +46,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +146,8 @@ public class WorkOrderHandleActivity extends BaseActivity {
     EditText etPzrz;
     @BindView(R.id.tv_pd_remark)
     TextView tvPdRemark;
+    @BindView(R.id.rv1)
+    RecyclerView rv1;
 
     private String id;
     private FaultMapInfo info;
@@ -163,6 +168,9 @@ public class WorkOrderHandleActivity extends BaseActivity {
     private List<String> optionList;
 
     private String newAssetId = "";
+
+    private List<String> ftPhotos;//工单附图
+    private AdapterCameraPhoto ftAdapter;
 
     @Override
     protected void initContentView(Bundle bundle) {
@@ -310,7 +318,8 @@ public class WorkOrderHandleActivity extends BaseActivity {
                                 if (img1.size() < num && !img1.contains("")) {
                                     img1.add("");
                                 }
-                                adapter1.notifyDataSetChanged();dialog.dismiss();
+                                adapter1.notifyDataSetChanged();
+                                dialog.dismiss();
                             }
                         });
                     }
@@ -384,7 +393,27 @@ public class WorkOrderHandleActivity extends BaseActivity {
         tv24.setText(StringUtil.isEmpty(info.getMap().getAssetName()) ? "" : info.getMap().getAssetName());//设备名称
         tv25.setText(StringUtil.isEmpty(info.getMap().getAssetCode()) ? "" : info.getMap().getAssetCode());//设备编号
 
+        getPhotoData();
+    }
 
+    private void getPhotoData() {
+        if (StringUtil.isEmpty(info.getMap().getPicture())) {
+            return;
+        }
+        ftPhotos = new ArrayList<>();
+        ftAdapter = new AdapterCameraPhoto(ftPhotos);
+        rv1.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        rv1.setAdapter(ftAdapter);
+        GetWorkOrderImgHttp.getImgByFtpAddress(info.getMap().getPicture(), this, new GetWorkOrderImgHttp.ImgDataListener() {
+            @Override
+            public void result(String json) {
+                String str = FastJsonUtil.getString(json, "imgPath");
+                if (!StringUtil.isEmpty(str)) {
+                    ftPhotos.addAll(Arrays.asList(str.split("!")));
+                    ftAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     private void initClick() {

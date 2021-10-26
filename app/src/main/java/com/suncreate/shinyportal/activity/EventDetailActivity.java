@@ -68,6 +68,24 @@ public class EventDetailActivity extends BaseActivity {
     TextView tv15;
     @BindView(R.id.ll_people)
     LinearLayout llPeople;
+    @BindView(R.id.tv_s1)
+    TextView tvS1;
+    @BindView(R.id.ll_s1)
+    LinearLayout llS1;
+    @BindView(R.id.tv_s2)
+    TextView tvS2;
+    @BindView(R.id.ll_s2)
+    LinearLayout llS2;
+    @BindView(R.id.tv_s3)
+    TextView tvS3;
+    @BindView(R.id.ll_s3)
+    LinearLayout llS3;
+    @BindView(R.id.tv_s4)
+    TextView tvS4;
+    @BindView(R.id.ll_s4)
+    LinearLayout llS4;
+    @BindView(R.id.ll13)
+    LinearLayout ll13;
 
     private String alarmId;
     private EventMapInfo info;
@@ -128,13 +146,46 @@ public class EventDetailActivity extends BaseActivity {
         tv10.setText(StringUtil.isEmpty(info.getAlarmStatus()) ? "" : info.getAlarmStatus());
         tv11.setText(StringUtil.isEmpty(info.getAlarmTime()) ? "" : StringUtil.dealDateFormat(info.getAlarmTime()));
         tv12.setText(StringUtil.isEmpty(info.getIp()) ? "" : info.getIp());
-        //tv13.setText(StringUtil.isEmpty(info.getAlarmName()) ? "" : info.getAlarmName());
+        if(StringUtil.isEmpty(info.getFaultType())){
+            ll13.setVisibility(View.GONE);
+        } else {
+            tv13.setText(StringUtil.isEmpty(info.getFaultType()) ? "" : info.getFaultType());
+            ll13.setVisibility(View.VISIBLE);
+        }
         tv14.setText(StringUtil.isEmpty(info.getAlarmReason()) ? "" : info.getAlarmReason());
         if (StringUtil.isEmpty(info.getMap().getAlarmPersion())) {
             llPeople.setVisibility(View.GONE);
-        } else{
+        } else {
             tv15.setText(info.getMap().getAlarmPersion());
             llPeople.setVisibility(View.VISIBLE);
+        }
+
+        if (StringUtil.isEmpty(info.getServiceRating())) {
+            llS1.setVisibility(View.GONE);
+        } else {
+            tvS1.setText(info.getServiceRating());
+            llS1.setVisibility(View.VISIBLE);
+        }
+
+        if (StringUtil.isEmpty(info.getServiceRating2())) {
+            llS2.setVisibility(View.GONE);
+        } else {
+            tvS2.setText(info.getServiceRating2());
+            llS2.setVisibility(View.VISIBLE);
+        }
+
+        if (StringUtil.isEmpty(info.getServiceRating3())) {
+            llS3.setVisibility(View.GONE);
+        } else {
+            tvS3.setText(info.getServiceRating3());
+            llS3.setVisibility(View.VISIBLE);
+        }
+
+        if (StringUtil.isEmpty(info.getServiceRating4())) {
+            llS4.setVisibility(View.GONE);
+        } else {
+            tvS4.setText(info.getServiceRating4());
+            llS4.setVisibility(View.VISIBLE);
         }
     }
 

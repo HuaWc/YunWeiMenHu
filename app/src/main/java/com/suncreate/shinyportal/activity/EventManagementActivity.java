@@ -111,12 +111,8 @@ public class EventManagementActivity extends BaseActivity {
     TextView tvTimeEnd;
     @BindView(R.id.rv5)
     RecyclerView rv5;
-    @BindView(R.id.tv_cancel)
-    TextView tvCancel;
     @BindView(R.id.tv_submit)
     TextView tvSubmit;
-    @BindView(R.id.ll_btn)
-    LinearLayout llBtn;
     @BindView(R.id.ll_select)
     LinearLayout llSelect;
     @BindView(R.id.all)
@@ -335,22 +331,7 @@ public class EventManagementActivity extends BaseActivity {
                         }
                     });
                 }
-            }
-        });
-        tvCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (llSelect.getVisibility() == View.VISIBLE) {
-                    llSelect.setVisibility(View.GONE);
-                    hide(llSelect);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            tvMoreBlue.setVisibility(View.GONE);
-                            tvMore.setVisibility(View.VISIBLE);
-                        }
-                    });
-                }
+                getData(false);
             }
         });
         tvSubmit.setOnClickListener(new View.OnClickListener() {
@@ -742,7 +723,7 @@ public class EventManagementActivity extends BaseActivity {
                 bundle.putString("str1", mList.get(position).getMap().getAssetName());
                 bundle.putString("str2", mList.get(position).getMap().getOrgName());
                 bundle.putString("str3", mList.get(position).getMap().getAlarmTime());
-                bundle.putString("str4", "");
+                bundle.putString("str4", mList.get(position).getMap().getRecoveryTime());
 
                 switch (view.getId()) {
                     case R.id.tv_look:

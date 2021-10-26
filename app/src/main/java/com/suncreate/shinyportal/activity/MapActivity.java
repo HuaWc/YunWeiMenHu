@@ -1161,10 +1161,10 @@ public class MapActivity extends BaseActivity {
 
         mapController = m_mapView.getController();
 
-        PermissionsUtil.requestPermission(this, new PermissionListener() {
+/*        PermissionsUtil.requestPermission(this, new PermissionListener() {
             @Override
             public void permissionGranted(@NonNull String[] permission) {
-/*                GDLocationUtil.getLocation(new GDLocationUtil.MyLocationListener() {
+*//*                GDLocationUtil.getLocation(new GDLocationUtil.MyLocationListener() {
                     @Override
                     public void result(AMapLocation location) {
                         double longitude = location.getLongitude();
@@ -1183,7 +1183,7 @@ public class MapActivity extends BaseActivity {
 
 
                     }
-                });*/
+                });*//*
                 getLocation();
             }
 
@@ -1191,7 +1191,7 @@ public class MapActivity extends BaseActivity {
             public void permissionDenied(@NonNull String[] permission) {
                 ToastUtil.toast("未开启定位权限");
             }
-        }, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+        }, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);*/
 
     }
 
@@ -1200,7 +1200,7 @@ public class MapActivity extends BaseActivity {
      */
     public void getLocation() {
         LocationManagePlugin locationManagePlugin = new LocationManagePlugin();
-        boolean openGpsDeviceState = locationManagePlugin.openGpsDevice((LocationManager) Objects.requireNonNull(getSystemService(Context.LOCATION_SERVICE)));
+        boolean openGpsDeviceState = locationManagePlugin.openGpsDevice((LocationManager) getSystemService(Context.LOCATION_SERVICE));
         if (openGpsDeviceState) {
 //            locationManagePlugin.setTimeInterval(5000);
             locationManagePlugin.addLocationChangedListener(new LocationChangedListener() {
@@ -1224,7 +1224,20 @@ public class MapActivity extends BaseActivity {
 
                 @Override
                 public void locationChanged(LocationManagePlugin.GPSData gpsData, LocationManagePlugin.GPSData gpsData1, boolean b) {
+/*                    if (gpsData1 != null && b) {
+                        longitude = gpsData1.dLongitude;
+                        latitude = gpsData1.dLatitude;
+                        //Gps gps = PositionUtil.gcj_To_Wgs84(latitude, longitude);
+                        setSuperMapCenter(longitude, latitude, true);
 
+                        Drawable drawable = getResources().getDrawable(R.mipmap.ic_supermap_location);
+                        DefaultItemizedOverlay locationOverlay = new DefaultItemizedOverlay(drawable);
+                        locationOverlay.setKey("location_my_point");
+                        locationOverlay.addItem(new OverlayItem(new Point2D(longitude, latitude),
+                                "center", "location_my_point"));
+                        m_mapView.getOverlays().add(locationOverlay);
+                        pointList.put("location_my_point", locationOverlay);
+                    }*/
                 }
             });
         }

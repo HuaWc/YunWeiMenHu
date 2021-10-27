@@ -889,13 +889,54 @@ public class MapActivity extends BaseActivity {
         adapterMapSearchItem = new AdapterMapSearchItem(searchItems);
         rvSearchRelative.setLayoutManager(new LinearLayoutManager(mContext));
         rvSearchRelative.setAdapter(adapterMapSearchItem);
-        adapterMapSearchItem.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        adapterMapSearchItem.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                //搜索结果 直接进入相机详情
-                Bundle bundle = new Bundle();
-                bundle.putString("cameraId", searchItems.get(position).getId());
-                toTheActivity(DossierDetailActivity.class, bundle);
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                switch (view.getId()){
+                    case R.id.ll_text:
+                        //搜索结果 直接进入相机详情
+                        Bundle bundle = new Bundle();
+                        bundle.putString("cameraId", searchItems.get(position).getId());
+                        toTheActivity(DossierDetailActivity.class, bundle);
+                        break;
+                    case R.id.iv_locate:
+                        //移动点位，显示相机，隐藏搜索结果框
+                        MapSearchItem camera = searchItems.get(position);
+
+                        if (StringUtil.isEmpty(camera.getLatitude()) || StringUtil.isEmpty(camera.getLongitude())) {
+                            ToastUtil.toast("该相机的坐标信息有误，无法显示！");
+                            return;
+                        }
+                        cvSearchRelative.setVisibility(View.GONE);
+
+                        for (String s : pointList.keySet()) {
+                            if (s.equals(camera.getId())) {
+                                m_mapView.removeOverlayByKey(camera.getId());
+                            }
+                        }
+
+                        double longitude = Double.parseDouble(camera.getLongitude());
+                        double latitude = Double.parseDouble(camera.getLatitude());
+                        Gps g = PositionUtil.gcj_To_Wgs84(latitude, longitude);
+                        mapController.setCenter(new Point2D(g.getWgLon(), g.getWgLat()));
+
+                        Drawable drawable = getResources().getDrawable(R.mipmap.camera_point_icon);
+                        DefaultItemizedOverlay cameraOverlay = new DefaultItemizedOverlay(drawable);
+                        cameraOverlay.setKey(camera.getId());
+                        cameraOverlay.addItem(new OverlayItem(new Point2D(g.getWgLon(), g.getWgLat()),
+                                camera.getCameraName(), camera.getCameraCode()));
+                        cameraOverlay.setOnClickListener(new ItemizedOverlay.OnClickListener() {
+                            @Override
+                            public void onClicked(ItemizedOverlay itemizedOverlay, OverlayItem overlayItem) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("cameraId",itemizedOverlay.getKey());
+                                toTheActivity(DossierDetailActivity.class, bundle);
+                            }
+                        });
+                        m_mapView.getOverlays().add(cameraOverlay);
+                        pointList.put(camera.getId(), cameraOverlay);
+                        break;
+                }
             }
         });
 
@@ -1044,7 +1085,7 @@ public class MapActivity extends BaseActivity {
                     searchItems.addAll(list);
                 }
                 adapterMapSearchItem.notifyDataSetChanged();
-
+                cvSearchRelative.setVisibility(View.VISIBLE);
             }
 
             @Override

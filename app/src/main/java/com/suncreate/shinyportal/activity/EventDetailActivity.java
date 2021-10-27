@@ -17,6 +17,7 @@ import com.suncreate.shinyportal.http.ApiClient;
 import com.suncreate.shinyportal.http.AppConfig;
 import com.suncreate.shinyportal.http.GetWorkOrderImgHttp;
 import com.suncreate.shinyportal.http.ResultListener;
+import com.zds.base.Toast.ToastUtil;
 import com.zds.base.entity.EventCenter;
 import com.zds.base.json.FastJsonUtil;
 import com.zds.base.util.StringUtil;
@@ -219,6 +220,10 @@ public class EventDetailActivity extends BaseActivity {
             @Override
             public void result(String json) {
                 String str = FastJsonUtil.getString(json, "imgPath");
+                if("null".equals(str)){
+                    ToastUtil.toast("服务器中没有对应图片，获取失败！");
+                    return;
+                }
                 if (!StringUtil.isEmpty(str)) {
                     photos.addAll(Arrays.asList(str.split("!")));
                     adapter.notifyDataSetChanged();

@@ -189,7 +189,7 @@ public class EventListFragment extends BaseFragment {
     private void getFjData() {
         mList6.clear();
         fjList.clear();
-        GetDictDataHttp.getDictData(getContext(), "PT_FEN_JU", new GetDictDataHttp.GetDictDataResult() {
+        GetDictDataHttp.getDictData(getContext(), "PT_ADMINISTRATIVE_EREA", new GetDictDataHttp.GetDictDataResult() {
             @Override
             public void getData(List<DictInfo> list) {
                 if (list != null) {

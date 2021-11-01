@@ -7,47 +7,30 @@ package com.suncreate.shinyportal.entity;
  */
 public class WorkPeople {
 
-    private int id;
-    private String userId;
-    private int roleId;
-    private Object roleType;
-    private int isTemp;
-    private Object startTime;
-    private Object endTime;
-    private Map map;
-    private String realName;
-    private String mobileNo;
 
-    public int getId() {
+    private long id;
+    private int isSync;
+    private int isTemp;
+    private Map map;
+    private String mobileNo;
+    private String realName;
+    private int roleId;
+    private String userId;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public int getIsSync() {
+        return isSync;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    public Object getRoleType() {
-        return roleType;
-    }
-
-    public void setRoleType(Object roleType) {
-        this.roleType = roleType;
+    public void setIsSync(int isSync) {
+        this.isSync = isSync;
     }
 
     public int getIsTemp() {
@@ -58,28 +41,20 @@ public class WorkPeople {
         this.isTemp = isTemp;
     }
 
-    public Object getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Object startTime) {
-        this.startTime = startTime;
-    }
-
-    public Object getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Object endTime) {
-        this.endTime = endTime;
-    }
-
     public Map getMap() {
         return map;
     }
 
     public void setMap(Map map) {
         this.map = map;
+    }
+
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
     }
 
     public String getRealName() {
@@ -90,12 +65,20 @@ public class WorkPeople {
         this.realName = realName;
     }
 
-    public String getMobileNo() {
-        return mobileNo;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setMobileNo(String mobileNo) {
-        this.mobileNo = mobileNo;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public static class Map {

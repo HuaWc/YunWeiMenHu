@@ -13,10 +13,14 @@
  */
 package com.suncreate.shinyportal.base;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -26,8 +30,14 @@ import androidx.annotation.RequiresApi;
 import androidx.multidex.MultiDex;
 import androidx.core.content.ContextCompat;
 
+import android.util.Base64;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.anhui.police.auth.sdk.AuthConfig;
 import com.anhui.police.auth.sdk.AuthSDK;
@@ -407,5 +417,38 @@ public class MyApplication extends SelfAppContext {
 
     public void upVideo(final String path, final String key, final String token, final UpCompletionHandler upCompletionHandler) {
         getUpM().put(path, key, token, upCompletionHandler, null);
+    }
+
+
+    public void showAllScreenBase64ImageDialog(Activity activity, String base64){
+        //展示在dialog上面的大图
+        Dialog dialog = new Dialog(activity,R.style.AllScreenImage);
+
+        WindowManager.LayoutParams attributes = activity.getWindow().getAttributes();
+        attributes.width = WindowManager.LayoutParams.MATCH_PARENT;
+        attributes.height = WindowManager.LayoutParams.MATCH_PARENT;
+        dialog.getWindow().setAttributes(attributes);
+
+        ImageView imageView = new ImageView(activity);
+
+        //宽高
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        //将Base64编码字符串解码成Bitmap
+        byte[] decodedString = Base64.decode(base64.split(",")[1], Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        //设置ImageView图片
+        imageView.setImageBitmap(decodedByte);
+
+        dialog.setContentView(imageView);
+
+        //大图的点击事件（点击让他消失）
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

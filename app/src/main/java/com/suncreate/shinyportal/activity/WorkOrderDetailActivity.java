@@ -9,9 +9,11 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.suncreate.shinyportal.R;
 import com.suncreate.shinyportal.adapter.AdapterCameraPhoto;
 import com.suncreate.shinyportal.base.BaseActivity;
+import com.suncreate.shinyportal.base.MyApplication;
 import com.suncreate.shinyportal.entity.DictInfo;
 import com.suncreate.shinyportal.entity.FaultAssetInfo;
 import com.suncreate.shinyportal.entity.FaultMapInfo;
@@ -174,7 +176,12 @@ public class WorkOrderDetailActivity extends BaseActivity {
         rv2.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         rv2.setAdapter(adapter2);
         RecyclerViewHelper.recyclerviewAndScrollView(rv2);
-
+        adapter2.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MyApplication.getInstance().showAllScreenBase64ImageDialog(WorkOrderDetailActivity.this,photo2.get(position));
+            }
+        });
         getData();
         getImgData();
     }
@@ -296,6 +303,12 @@ public class WorkOrderDetailActivity extends BaseActivity {
         ftAdapter = new AdapterCameraPhoto(ftPhotos);
         rv1.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         rv1.setAdapter(ftAdapter);
+        ftAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MyApplication.getInstance().showAllScreenBase64ImageDialog(WorkOrderDetailActivity.this,ftPhotos.get(position));
+            }
+        });
         GetWorkOrderImgHttp.getImgByFtpAddress(info.getMap().getPicture(), this, new GetWorkOrderImgHttp.ImgDataListener() {
             @Override
             public void result(String json) {

@@ -22,6 +22,7 @@ import com.suncreate.shinyportal.R;
 import com.suncreate.shinyportal.adapter.AdapterCameraPhoto;
 import com.suncreate.shinyportal.adapter.CommonImageAdapter;
 import com.suncreate.shinyportal.base.BaseActivity;
+import com.suncreate.shinyportal.base.MyApplication;
 import com.suncreate.shinyportal.entity.AssetEquipment;
 import com.suncreate.shinyportal.entity.DictInfo;
 import com.suncreate.shinyportal.entity.FaultMapInfo;
@@ -404,6 +405,12 @@ public class WorkOrderHandleActivity extends BaseActivity {
         ftAdapter = new AdapterCameraPhoto(ftPhotos);
         rv1.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         rv1.setAdapter(ftAdapter);
+        ftAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MyApplication.getInstance().showAllScreenBase64ImageDialog(WorkOrderHandleActivity.this,ftPhotos.get(position));
+            }
+        });
         GetWorkOrderImgHttp.getImgByFtpAddress(info.getMap().getPicture(), this, new GetWorkOrderImgHttp.ImgDataListener() {
             @Override
             public void result(String json) {

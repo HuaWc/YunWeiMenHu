@@ -15,9 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.suncreate.shinyportal.R;
 import com.suncreate.shinyportal.adapter.AdapterCameraPhoto;
 import com.suncreate.shinyportal.base.BaseActivity;
+import com.suncreate.shinyportal.base.MyApplication;
 import com.suncreate.shinyportal.entity.FaultMapInfo;
 import com.suncreate.shinyportal.entity.WorkOrderClr;
 import com.suncreate.shinyportal.http.ApiClient;
@@ -255,6 +257,12 @@ public class WorkOrderProblemUpActivity extends BaseActivity {
         ftAdapter = new AdapterCameraPhoto(ftPhotos);
         rv1.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         rv1.setAdapter(ftAdapter);
+        ftAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                MyApplication.getInstance().showAllScreenBase64ImageDialog(WorkOrderProblemUpActivity.this,ftPhotos.get(position));
+            }
+        });
         GetWorkOrderImgHttp.getImgByFtpAddress(info.getMap().getPicture(), this, new GetWorkOrderImgHttp.ImgDataListener() {
             @Override
             public void result(String json) {

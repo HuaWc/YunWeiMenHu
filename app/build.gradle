@@ -189,4 +189,6 @@ dependencies {
 
     implementation(name:'authsdk_v1.1.7.2020_062912', ext:'aar')//统一认证
 
+    implementation (name:'libfriapkrecord-r1.0.1', ext:'aar')//备案号
+
 }

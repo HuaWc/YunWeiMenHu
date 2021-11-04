@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.suncreate.shinyportal.R;
+import com.suncreate.shinyportal.activity.AppInfoActivity;
 import com.suncreate.shinyportal.activity.LoginActivity;
 import com.suncreate.shinyportal.base.ActivityStackManager;
 import com.suncreate.shinyportal.base.BaseFragment;
@@ -46,6 +48,8 @@ public class FirstPersonalFragment extends BaseFragment {
     TextView tvTime;
     @BindView(R.id.tv_logout)
     TextView tvLogout;
+    @BindView(R.id.ll_info)
+    LinearLayout llInfo;
 
 
     @Override
@@ -73,7 +77,6 @@ public class FirstPersonalFragment extends BaseFragment {
         tvTime.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(MyApplication.getInstance().getUserInfo().getLoginTime())));
 
 
-
     }
 
     private void initClick() {
@@ -81,6 +84,12 @@ public class FirstPersonalFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 //logout();
+            }
+        });
+        llInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toTheActivity(AppInfoActivity.class);
             }
         });
     }

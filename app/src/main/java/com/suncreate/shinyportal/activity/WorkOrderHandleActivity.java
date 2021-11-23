@@ -149,14 +149,19 @@ public class WorkOrderHandleActivity extends BaseActivity {
     TextView tvPdRemark;
     @BindView(R.id.rv1)
     RecyclerView rv1;
-
+    @BindView(R.id.tv_run_environment)
+    TextView tvRunEnvironment;
+    @BindView(R.id.tv_time_limit)
+    TextView tvTimeLimit;
+    @BindView(R.id.tv_check_similar)
+    TextView tvCheckSimilar;
     private String id;
     private FaultMapInfo info;
     private int type = 0;
     private List<DictInfo> methodList;
 
     private CommonImageAdapter adapter1;
-    private List<String> img1;//用于展示
+    private List<String> img1;//用于展示,和adapter绑定
     private List<Object> images1;//用于接口
     private List<String> imagesPath1;//用于删除
 
@@ -373,7 +378,7 @@ public class WorkOrderHandleActivity extends BaseActivity {
         tv9.setText(StringUtil.isEmpty(info.getMap().getOrgName()) ? "" : info.getMap().getOrgName());
         tv10.setText(StringUtil.isEmpty(info.getMap().getAssetName()) ? "" : info.getMap().getAssetName());
         tv11.setText(StringUtil.isEmpty(info.getMap().getPositionCode()) ? "" : info.getMap().getPositionCode());
-        tv12.setText(StringUtil.isEmpty(info.getMap().getManageIp()) ? "" : info.getMap().getManageIp());
+        tv12.setText(StringUtil.isEmpty(info.getMap().getOperationIP()) ? "" : info.getMap().getOperationIP());
         tv13.setText(StringUtil.isEmpty(info.getAlarmTime()) ? "" : StringUtil.dealDateFormat(info.getAlarmTime()));//发生时间
         tv14.setText(StringUtil.isEmpty(info.getAddTime()) ? "" : StringUtil.dealDateFormat(info.getAddTime()));//派单时间
         tv15.setText(StringUtil.isEmpty(info.getRecoverTime()) ? "" : StringUtil.dealDateFormat(info.getRecoverTime()));//恢复时间
@@ -393,7 +398,23 @@ public class WorkOrderHandleActivity extends BaseActivity {
 
         tv24.setText(StringUtil.isEmpty(info.getMap().getAssetName()) ? "" : info.getMap().getAssetName());//设备名称
         tv25.setText(StringUtil.isEmpty(info.getMap().getAssetCode()) ? "" : info.getMap().getAssetCode());//设备编号
-
+        if (String.valueOf(info.getMap().getIsSync()).endsWith("0")) {
+            tvRunEnvironment.setText("视频网");
+        } else if (String.valueOf(info.getMap().getIsSync()).endsWith("1")) {
+            tvRunEnvironment.setText("公安网");
+        } else {
+            tvRunEnvironment.setText("未知");
+        }
+        tvTimeLimit.setText(StringUtil.isEmpty(info.getDeadlineTime()) ? "" : StringUtil.dealDateFormat(info.getDeadlineTime()));
+        tvCheckSimilar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("assetId",info.getAssetId());
+                bundle.putString("alarmName",info.getAlarmName());
+                toTheActivity(SimilarWorkOrderActivity.class,bundle);
+            }
+        });
         getPhotoData();
     }
 
@@ -408,14 +429,14 @@ public class WorkOrderHandleActivity extends BaseActivity {
         ftAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                MyApplication.getInstance().showAllScreenBase64ImageDialog(WorkOrderHandleActivity.this,ftPhotos.get(position));
+                MyApplication.getInstance().showAllScreenBase64ImageDialog(WorkOrderHandleActivity.this, ftPhotos.get(position));
             }
         });
         GetWorkOrderImgHttp.getImgByFtpAddress(info.getMap().getPicture(), this, new GetWorkOrderImgHttp.ImgDataListener() {
             @Override
             public void result(String json) {
                 String str = FastJsonUtil.getString(json, "imgPath");
-                if("null".equals(str)){
+                if ("null".equals(str)) {
                     ToastUtil.toast("服务器中没有对应图片，获取失败！");
                     return;
                 }
@@ -493,9 +514,9 @@ public class WorkOrderHandleActivity extends BaseActivity {
         tv26.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //选择原设备状态
                 hideSoftKeyboard();
                 hideSoftKeyboard3();
-                //选择原设备状态
                 if (optionList == null || optionList.size() == 0) {
                     ToastUtil.toast("状态值为空，请稍后再试！");
                     return;
@@ -590,6 +611,12 @@ public class WorkOrderHandleActivity extends BaseActivity {
                 newAssetId = a.getId();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().post(new EventCenter(EventUtil.REFRESH_FAULT_LIST));
     }
 
     @Override

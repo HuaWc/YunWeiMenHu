@@ -108,6 +108,8 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
     TextView tvTitleMain;
     @BindView(R.id.tv_reset_time)
     TextView tvResetTime;
+    @BindView(R.id.rv4)
+    RecyclerView rv4;
 
     private int page = 1;
     private int pageSize = 10;
@@ -155,6 +157,10 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
     private String selectedorgIds = "";
 
     private boolean isUpcoming = false;
+
+    private List<DictInfo> mList8;
+    private SelectOptionsChildAdapter adapter8;
+    private String value8 = "";
 
     @Override
     protected void initContentView(Bundle bundle) {
@@ -206,7 +212,7 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         pcsList.clear();
         Map<String, Object> hashMap = new HashMap<>();
         hashMap.put("areaCode", id);
-        ApiClient.requestNetGet(this, AppConfig.pcsList, "加载中", hashMap, new ResultListener() {
+        ApiClient.requestNetGet(this, AppConfig.pcsList, "", hashMap, new ResultListener() {
             @Override
             public void onSuccess(String json, String msg) {
                 List<DAPcs> list = FastJsonUtil.getList(json, DAPcs.class);
@@ -342,6 +348,37 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         optionsList5 = new ArrayList<>();
         getDictData5();
 
+        mList8 = new ArrayList<>();
+        adapter8 = new SelectOptionsChildAdapter(mList8);
+        adapter8.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (!mList8.get(position).isSelected()) {
+                    //当前未选中
+                    for (DictInfo dictInfo : mList8) {
+                        if (dictInfo.isSelected()) {
+                            dictInfo.setSelected(false);
+                            adapter8.notifyItemChanged(mList8.indexOf(dictInfo));
+                            break;
+                        }
+                    }
+                    mList8.get(position).setSelected(true);
+                    adapter8.notifyItemChanged(position);
+                    value8 = mList8.get(position).getDataValue();
+
+                } else {
+                    //当前选中
+                    mList8.get(position).setSelected(false);
+                    adapter8.notifyItemChanged(position);
+                    value8 = "";
+                }
+            }
+        });
+        rv4.setAdapter(adapter8);
+        rv4.setLayoutManager(new GridLayoutManager(this, 3));
+        RecyclerViewHelper.recyclerviewAndScrollView(rv4);
+        getDictData8();
+
         getUserTypes();
     }
 
@@ -451,6 +488,9 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
         }
         if (!StringUtil.isEmpty(value5)) {
             params.put("verifyStatus", value5);
+        }
+        if (!StringUtil.isEmpty(value8)) {
+            params.put("alarmSource", value8);
         }
         if (!StringUtil.isEmpty(startStr)) {
             params.put("alarmTimeStart", startStr);
@@ -812,6 +852,18 @@ public class WorkOrderManagementUserActivity extends BaseActivity {
                     for (DictInfo op : list) {
                         optionsList5.add(op.getDataName());
                     }
+                }
+            }
+        });
+    }
+
+    private void getDictData8() {
+        GetDictDataHttp.getDictData(this, "OP_ALARM_SOURCE", new GetDictDataHttp.GetDictDataResult() {
+            @Override
+            public void getData(List<DictInfo> list) {
+                if (list != null) {
+                    mList8.addAll(list);
+                    adapter8.notifyDataSetChanged();
                 }
             }
         });

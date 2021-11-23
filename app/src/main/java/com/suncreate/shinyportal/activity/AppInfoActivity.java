@@ -48,6 +48,12 @@ public class AppInfoActivity extends BaseActivity {
     @Override
     protected void initLogic() {
         initBar();
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         bar.setBackgroundColor(getResources().getColor(R.color.main_bar_color));
         tv1.setText("六安移动运维");
         tv2.setText("v" + MyApplication.getInstance().getVersionName());
